@@ -63,6 +63,18 @@ exports.edit = async function(req, res) {
     }
 }
 
+exports.delete = async function(req, res) {
+    try {
+        const result = await Product.deleteOne({_id: req.params.id})
+        console.log(result);
+        res.redirect('/products')
+        // some feed back?        
+    } catch {
+        console.log('something wrong');
+        res.redirect('/products')
+    }
+}
+
 async function renderAddPage(res, product, flag = 0) {
     try {
         const params = {
