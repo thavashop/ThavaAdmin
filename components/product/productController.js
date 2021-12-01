@@ -1,4 +1,3 @@
-const baseModule = require('hbs');
 const Product = require('./productModel')
 const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
 
@@ -57,7 +56,7 @@ exports.edit = async function(req, res) {
             imageType: dummy.imageType
         }})
         console.log(product);
-        renderEditPage(res, product, 1)
+        res.redirect('/products') // feedback
     } catch {
         console.log('something wrong');
     }

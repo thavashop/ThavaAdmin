@@ -40,17 +40,17 @@
                                     <div class="d-sm-flex justify-content-between">
                                         <div></div>
                                         <div>
-                                            <a href="/products/edit/{{id}}">
+                                            <a href="/products/{{id}}/edit">
                                                 <button type="button" class="btn btn-outline-primary">Edit</button>
                                             </a>
 
                                             {{!-- <button type="button" class="btn btn-outline-danger">Delete</button>
                                             --}}
                                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                                data-target="#basicModal">Delete</button>
+                                                data-target="#basicModal{{id}}">Delete</button>
 
                                             {{!-- Confirmation modal --}}
-                                            <div class="modal fade" id="basicModal" style="display: none;"
+                                            <div class="modal fade" id="basicModal{{id}}" style="display: none;"
                                                 aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
@@ -65,10 +65,11 @@
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-dismiss="modal">Cancel</button>
-                                                            <a href="/products/delete/{{id}}">
-                                                                <button type="button"
+                                                            <form action="/products/{{id}}?_method=DELETE"
+                                                                method="post">
+                                                                <button type="submit"
                                                                     class="btn btn-danger">Delete</button>
-                                                            </a>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -10,10 +10,10 @@ router.get('/add', controller.renderAdd);
 router.post('/', controller.add)
 
 // edit product
-router.get('/edit/:id', controller.renderEdit)
-router.post('/edit/:id', controller.edit)
+router.get('/:id/edit', controller.renderEdit)
+router.put('/:id', controller.edit)
 
 // delete product
-router.get('/delete/:id', controller.delete)
+router.delete('/:id', controller.delete)
 
 module.exports = router;
