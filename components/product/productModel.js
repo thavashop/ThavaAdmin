@@ -10,6 +10,12 @@ const schema = mongoose.Schema({
         required: true
     },
     image: Buffer,
+    image2: String,
+    material: String,
+    care: String,
+    brand: String,
+    color: String,
+    size: String,
     imageType: String,
     description: String
 })
@@ -20,4 +26,4 @@ schema.virtual('imageObj').get(function() {
     }
 })
 
-module.exports = mongoose.model('Product', schema, 'test')
+module.exports = mongoose.model('Product', schema, 'product')

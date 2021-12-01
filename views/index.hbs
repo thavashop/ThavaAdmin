@@ -2,27 +2,28 @@
     <div class="col-sm-6 p-md-0">
         <div class="welcome-text">
             <h4>Hi, welcome back!</h4>
-            <span class="ml-1">Datatable</span>
+            <span class="ml-1">ThavaAdmin</span>
         </div>
     </div>
     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Products</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">List</a></li>
         </ol>
     </div>
 </div>
+{{#if error}}
+<div class="alert alert-danger">{{error}}</div>
+{{/if}}
+{{#if success}}
+<div class="alert alert-success">{{success}}</div>
+{{/if}}
+<div></div>
 <div class="row">
     <div class="col-12">
         <div class="card">
-            {{#if error}}
-            <div class="alert alert-danger">{{error}}</div>
-            {{/if}}
-            {{#if success}}
-            <div class="alert alert-success">{{success}}</div>
-            {{/if}}
             <div class="card-header">
-                <h4 class="card-title">Basic Datatable</h4>
+                <h4 class="card-title">Product Datatable</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -31,6 +32,11 @@
                             <tr>
                                 <th>Image</th>
                                 <th>Name</th>
+                                <th>Brand</th>
+                                <th>Color</th>
+                                <th>Material</th>
+                                <th>Size</th>
+                                <th>Care</th>
                                 <th>Price</th>
                                 <th>Description</th>
                             </tr>
@@ -40,13 +46,18 @@
                             <tr>
                                 <td><img width="50" height="50" src={{imageObj}}></td>
                                 <td>{{name}}</td>
+                                <td>{{brand}}</td>
+                                <td>{{color}}</td>
+                                <td>{{material}}</td>
+                                <td>{{size}}</td>
+                                <td>{{care}}</td>
                                 <td>{{price}}</td>
                                 <td>{{description}}</td>
                                 <td>
                                     <div class="d-sm-flex justify-content-between">
                                         <div></div>
                                         <div>
-                                            <a href="/products/{{id}}/edit">
+                                            <a href="/products/{{id}}/edit?page={{../page}}">
                                                 <button type="button" class="btn btn-outline-primary">Edit</button>
                                             </a>
 
@@ -71,7 +82,7 @@
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-dismiss="modal">Cancel</button>
-                                                            <form action="/products/{{id}}?_method=DELETE"
+                                                            <form action="/products/{{id}}?_method=DELETE&page={{../page}}"
                                                                 method="post">
                                                                 <button type="submit"
                                                                     class="btn btn-danger">Delete</button>
@@ -88,13 +99,34 @@
                             </tr>
                             {{/each}}
                         </tbody>
-                        {{!-- <tfoot>
-                            <tr>
+                        <tfoot>
+                            {{!-- <tr>
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Description</th>
-                            </tr>
-                        </tfoot> --}}
+                            </tr> --}}
+                            <ul class="pagination pagination-gutter">
+                                {{!-- <li class="page-item page-indicator">
+                                    <a class="page-link" href="javascript:void()">
+                                        <i class="icon-arrow-left"></i></a>
+                                </li> --}}
+
+                                {{!-- <li class="page-item active"><a class="page-link" href="/products?page=1">1</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="/products?page=2">2</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void()">3</a></li> --}}
+                                {{#each pages}}
+                                {{!-- <li class="page-item {{#if (equals page this)}}active{{/if}}">
+                                    <a class="page-link" href="/products?page={{this+1}}">{{this+1}}</a></li> --}}
+                                <li class="page-item"><a class="page-link" href="/products?page={{this}}">{{this}}</a></li>
+                                {{/each}}
+
+                                {{!-- <li class="page-item page-indicator">
+                                    <a class="page-link" href="javascript:void()">
+                                        <i class="icon-arrow-right"></i></a>
+                                </li> --}}
+                            </ul>
+                        </tfoot>
                     </table>
                 </div>
             </div>

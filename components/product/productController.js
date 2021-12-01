@@ -3,14 +3,26 @@ const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
 
 exports.list = async function (req, res) {
     try {
-        const products = await Product.find({})
+        const itemPerPage = 5
+        const nProduct = await Product.count({}).exec()
+        const nPage = Math.ceil(nProduct / itemPerPage)
+        const pages = Array.from(Array(nPage), (_, i) => i + 1)
+
+        const q = req.query
+        const page = q.page == null ? 0 : q.page-1
+        const products = await Product.find({}).skip(page*itemPerPage).limit(itemPerPage)
         let success
         let error
-        console.log(req.query);
-        if (req.query.del == 1) success = 'Product deleted'
-        if (req.query.del == 0) error = "There's a problem deleting product"
-        if (req.query.edt == 1) success = 'Product editted'
-        res.render('index', { products: products, success: success, error: error });
+        if (q.del == 1) success = 'Product deleted'
+        if (q.del == 0) error = "There's a problem deleting product"
+        if (q.edt == 1) success = 'Product editted'
+        res.render('index', { 
+            page: page + 1,
+            pages: pages, 
+            products: products, 
+            success: success, 
+            error: error 
+        });
     } catch {
         console.log('err getting products');
         res.render('index')
@@ -42,7 +54,7 @@ exports.add = async function (req, res) {
 exports.renderEdit = async function (req, res) {
     try {
         const product = await Product.findById(req.params.id)
-        renderEditPage(res, product)
+        renderEditPage(res, req.query.page, product)
     } catch (err) {
         console.log(err);
         res.redirect('products')
@@ -73,10 +85,10 @@ exports.edit = async function (req, res) {
         saveImage(product, body.image)
         await product.save()
         // renderEditPage(res, product, 1)
-        res.redirect('/products?edt=1')
+        res.redirect('/products?edt=1&page='+req.query.page)
     } catch (err) {
         console.log(err);
-        renderEditPage(res, product, -1)
+        renderEditPage(res, req.query.page, product, -1)
     }
 }
 
@@ -85,11 +97,11 @@ exports.delete = async function (req, res) {
         const result = await Product.deleteOne({ _id: req.params.id })
         console.log(result);
         // res.render('/products', { success: 'Product deleted' })
-        res.redirect('/products?del=1')
+        res.redirect('/products?del=1&page='+req.query.page)
     } catch (err) {
         console.log(err);
         // res.render('/products', { error: "There's a problem deleting product" })
-        res.redirect('/products?del=0')
+        res.redirect('/products?del=0&page='+req.query.page)
     }
 }
 
@@ -107,10 +119,11 @@ async function renderAddPage(res, product, flag = 0) {
     }
 }
 
-async function renderEditPage(res, product, flag = 0) {
+async function renderEditPage(res, page, product, flag = 0) {
     try {
         const params = {
-            product: product
+            product: product,
+            page: page
         }
         if (flag == -1) params.error = 'Error editting product'
         else if (flag == 1) params.success = 'Product editted'
