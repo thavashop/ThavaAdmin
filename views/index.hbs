@@ -106,25 +106,19 @@
                                 <th>Description</th>
                             </tr> --}}
                             <ul class="pagination pagination-gutter">
-                                {{!-- <li class="page-item page-indicator">
-                                    <a class="page-link" href="javascript:void()">
+                                <li class="page-item page-indicator">
+                                    <a class="page-link" href="/products?page={{dec page}}">
                                         <i class="icon-arrow-left"></i></a>
-                                </li> --}}
-
-                                {{!-- <li class="page-item active"><a class="page-link" href="/products?page=1">1</a>
                                 </li>
-                                <li class="page-item"><a class="page-link" href="/products?page=2">2</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void()">3</a></li> --}}
                                 {{#each pages}}
-                                {{!-- <li class="page-item {{#if (equals page this)}}active{{/if}}">
-                                    <a class="page-link" href="/products?page={{this+1}}">{{this+1}}</a></li> --}}
-                                <li class="page-item"><a class="page-link" href="/products?page={{this}}">{{this}}</a></li>
+                                <li class="page-item {{#if (equals ../page this)}}active{{else}}{{/if}}">
+                                    <a class="page-link" href="/products?page={{this}}">{{this}}</a></li>
+                                {{!-- <li class="page-item"><a class="page-link" href="/products?page={{this}}">{{this}}</a></li> --}}
                                 {{/each}}
-
-                                {{!-- <li class="page-item page-indicator">
-                                    <a class="page-link" href="javascript:void()">
+                                <li class="page-item page-indicator">
+                                    <a class="page-link" href="/products?page={{inc page}}">
                                         <i class="icon-arrow-right"></i></a>
-                                </li> --}}
+                                </li>
                             </ul>
                         </tfoot>
                     </table>

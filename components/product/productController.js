@@ -3,28 +3,36 @@ const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
 
 exports.list = async function (req, res) {
     try {
+        // pagination        
         const itemPerPage = 5
         const nProduct = await Product.count({}).exec()
         const nPage = Math.ceil(nProduct / itemPerPage)
         const pages = Array.from(Array(nPage), (_, i) => i + 1)
-
         const q = req.query
-        const page = q.page == null ? 0 : q.page-1
-        const products = await Product.find({}).skip(page*itemPerPage).limit(itemPerPage)
+        let page = q.page == null ? 0 : q.page - 1
+        page = Math.max(0, Math.min(page, nPage-1))
+        // let clampedPage = Math.max(0, Math.min(page, nPage-1))
+        // if (page != clampedPage) {
+        //     clampedPage = clampedPage + 1
+        //     res.redirect('/products?page='+clampedPage)    
+        // }
+        const products = await Product.find({}).skip(page * itemPerPage).limit(itemPerPage)
+
+        // notification
         let success
         let error
         if (q.del == 1) success = 'Product deleted'
         if (q.del == 0) error = "There's a problem deleting product"
         if (q.edt == 1) success = 'Product editted'
-        res.render('index', { 
+        res.render('index', {
             page: page + 1,
-            pages: pages, 
-            products: products, 
-            success: success, 
-            error: error 
+            pages: pages,
+            products: products,
+            success: success,
+            error: error
         });
-    } catch {
-        console.log('err getting products');
+    } catch (err) {
+        console.log(err);
         res.render('index')
     }
 }
@@ -39,6 +47,11 @@ exports.add = async function (req, res) {
         name: body.name,
         price: body.price,
         description: body.description,
+        brand: body.brand,
+        material: body.material,
+        care: body.care,
+        color: body.color,
+        size: body.size
     })
     saveImage(product, body.image)
     // console.log(product);
@@ -81,11 +94,16 @@ exports.edit = async function (req, res) {
             name = body.name
             price = body.price
             description = body.description
+            brand = body.brand
+            material = body.material
+            care = body.care
+            color = body.color
+            size = body.size
         }
         saveImage(product, body.image)
         await product.save()
         // renderEditPage(res, product, 1)
-        res.redirect('/products?edt=1&page='+req.query.page)
+        res.redirect('/products?edt=1&page=' + req.query.page)
     } catch (err) {
         console.log(err);
         renderEditPage(res, req.query.page, product, -1)
@@ -97,11 +115,11 @@ exports.delete = async function (req, res) {
         const result = await Product.deleteOne({ _id: req.params.id })
         console.log(result);
         // res.render('/products', { success: 'Product deleted' })
-        res.redirect('/products?del=1&page='+req.query.page)
+        res.redirect('/products?del=1&page=' + req.query.page)
     } catch (err) {
         console.log(err);
         // res.render('/products', { error: "There's a problem deleting product" })
-        res.redirect('/products?del=0&page='+req.query.page)
+        res.redirect('/products?del=0&page=' + req.query.page)
     }
 }
 
