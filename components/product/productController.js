@@ -1,11 +1,12 @@
-const Product = require('./productModel')
+const productService = require('./productService')
+const Product = productService.products
 const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
 
 exports.list = async function (req, res) {
     try {
         // pagination        
         const itemPerPage = 5
-        const nProduct = await Product.count({}).exec()
+        const nProduct = await productService.count()
         const nPage = Math.ceil(nProduct / itemPerPage)
         const pages = Array.from(Array(nPage), (_, i) => i + 1)
         const q = req.query
@@ -16,7 +17,7 @@ exports.list = async function (req, res) {
         //     clampedPage = clampedPage + 1
         //     res.redirect('/products?page='+clampedPage)    
         // }
-        const products = await Product.find({}).skip(page * itemPerPage).limit(itemPerPage)
+        const products = await productService.findByPage(page, itemPerPage)
 
         // notification
         let success
@@ -66,7 +67,7 @@ exports.add = async function (req, res) {
 
 exports.renderEdit = async function (req, res) {
     try {
-        const product = await Product.findById(req.params.id)
+        const product = await productService.findById(req.params.id)
         renderEditPage(res, req.query.page, product)
     } catch (err) {
         console.log(err);
@@ -89,7 +90,7 @@ exports.edit = async function (req, res) {
         //     imageType: dummy.imageType
         // }})
         // console.log(result);
-        product = await Product.findById(id)
+        product = await productService.findById(id)
         with (product) {
             name = body.name
             price = body.price
@@ -112,7 +113,7 @@ exports.edit = async function (req, res) {
 
 exports.delete = async function (req, res) {
     try {
-        const result = await Product.deleteOne({ _id: req.params.id })
+        const result = await productService.deleteOne(req.params.id)
         console.log(result);
         // res.render('/products', { success: 'Product deleted' })
         res.redirect('/products?del=1&page=' + req.query.page)
