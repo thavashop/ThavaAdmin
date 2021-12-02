@@ -126,14 +126,15 @@ exports.delete = async function (req, res) {
 async function renderAddPage(res, product, flag = 0) {
     try {
         const params = {
-            product: product
+            product: product,
+            everySize: Product.everySize
         }
         if (flag == -1) params.error = 'Error creating product'
         else if (flag == 1) params.success = 'Product created'
         res.render('./products/add', params)
     } catch (err) {
         console.log(err);
-        res.redirect('products')
+        res.redirect('/products')
     }
 }
 
@@ -141,14 +142,15 @@ async function renderEditPage(res, page, product, flag = 0) {
     try {
         const params = {
             product: product,
-            page: page
+            page: page,
+            everySize: Product.everySize
         }
         if (flag == -1) params.error = 'Error editting product'
         else if (flag == 1) params.success = 'Product editted'
         res.render('products/edit', params)
     } catch (err) {
         console.log(err);
-        res.redirect('products')
+        res.redirect('/products')
     }
 }
 

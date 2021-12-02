@@ -15,7 +15,7 @@ const schema = mongoose.Schema({
     care: String,
     brand: String,
     color: String,
-    size: String,
+    size: Array,
     imageType: String,
     description: String
 })
@@ -27,3 +27,4 @@ schema.virtual('imageObj').get(function() {
 })
 
 module.exports = mongoose.model('Product', schema, 'product')
+module.exports.everySize = ['S','M','L','XL','XXL']
