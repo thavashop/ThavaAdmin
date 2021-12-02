@@ -45,15 +45,15 @@
                             {{#each products}}
                             <tr>
                                 <td><img width="50" height="50" src={{imageObj}}></td>
-                                <td>{{name}}</td>
+                                <td style="max-width: 150px;">{{name}}</td>
                                 <td>{{brand}}</td>
                                 <td>{{color}}</td>
-                                <td>{{material}}</td>
+                                <td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{material}}</td>
                                 <td>{{size}}</td>
                                 <td>{{care}}</td>
                                 <td>{{price}}</td>
-                                <td>{{description}}</td>
-                                <td>
+                                <td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{description}}</td>
+                                <td style="max-width: fit-content;">
                                     <div class="d-sm-flex justify-content-between">
                                         <div></div>
                                         <div>
