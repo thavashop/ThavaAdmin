@@ -79,13 +79,16 @@
                     <div class="d-sm-flex justify-content-between">
                         <div></div>
                         <div>
-                            <button type="button" class="btn btn-light mb-2"><a href="/">Cancel</a></button>
-                            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                            <button type="button" class="btn btn-light mb-2"><a href="/products">Cancel</a></button>
+                            <button type="submit" class="btn btn-primary mb-2">Add</button>
                         </div>
                     </div>
                 </form>
 
                 {{!-- Notification --}}
+                {{#if messages.error}}
+                    {{messages.error}}
+                {{/if}}
                 {{#if errMessage}}
                 <div class="alert alert-danger">{{errMessage}}</div>
                 {{/if}}

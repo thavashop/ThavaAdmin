@@ -16,7 +16,7 @@
   <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
   <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
     rel="stylesheet" />
-  
+
   {{!--
   <script defer scr="/js/fileUpload.js"></script> --}}
 
@@ -145,9 +145,9 @@
                 </div>
               </li>
               <li class="nav-item dropdown header-profile">
-                Hello {{adminName}}
                 <a class="nav-link" href="#" role="button" data-toggle="dropdown">
                   <i class="mdi mdi-account"></i>
+                  {{adminName}}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                   <a href="/app-profile.html" class="dropdown-item">
@@ -187,6 +187,14 @@
             <ul aria-expanded="false">
               <li><a href="/products">List of products</a></li>
               <li><a href="/products/add">Add new product</a></li>
+            </ul>
+          </li>
+
+          <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                class="icon icon-single-04"></i><span class="nav-text">Accounts</span></a>
+            <ul aria-expanded="false">
+              <li><a href="/accounts">List of admin accounts</a></li>
+              <li><a href="/accounts/add">Add new admin account</a></li>
             </ul>
           </li>
 

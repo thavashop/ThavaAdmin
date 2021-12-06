@@ -1,13 +1,15 @@
-const productService = require('./productService')
-const Product = productService.model
+const adminService = require('./adminService')
+const Admin = adminService.model
 const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
 
-exports.list = async function (req, res) {
+const flash = require('express-flash')
+
+exports.list = async (req, res) => {
     try {
         // pagination        
-        const itemPerPage = 5
-        const nProduct = await productService.count()
-        const nPage = Math.ceil(nProduct / itemPerPage)
+        const itemPerPage = 10
+        const nAdmin = await adminService.count()
+        const nPage = Math.ceil(nAdmin / itemPerPage)
         const pages = Array.from(Array(nPage), (_, i) => i + 1)
         const q = req.query
         let page = q.page == null ? 0 : q.page - 1
@@ -17,51 +19,50 @@ exports.list = async function (req, res) {
         //     clampedPage = clampedPage + 1
         //     res.redirect('/products?page='+clampedPage)    
         // }
-        const products = await productService.findByPage(page, itemPerPage)
+        const admins = await adminService.findByPage(page, itemPerPage)
 
         // notification
-        let success
-        let error
-        if (q.del == 1) success = 'Product deleted'
-        if (q.del == 0) error = "There's a problem deleting product"
-        if (q.edt == 1) success = 'Product editted'
-        res.render('index', {
+        res.render('accounts/index', {
             page: page + 1,
             pages: pages,
-            products: products,
-            success: success,
-            error: error
+            accounts: admins,
         });
     } catch (err) {
         console.log(err);
-        res.render('index')
+        res.render('accounts/index')
     }
 }
 
 exports.renderAdd = async (req, res) => {
-    renderAddPage(req, res, new Product())
+    renderAddPage(res, adminService.new())
 }
 
-exports.add = async function (req, res) {
+exports.add = async (req, res) => {
     const body = req.body
-    const product = new Product({
-        name: body.name,
-        price: body.price,
-        description: body.description,
-        brand: body.brand,
-        material: body.material,
-        care: body.care,
-        color: body.color,
-        size: body.size
+
+    // validate password
+    if (body.password != body.password2) {
+        req.flash('error','Password confirmation does not match')
+        return renderAddPage(res, body)
+    }
+
+    const admin = new Admin({
+        username: body.username,
+        password: body.password,
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: body.email,
+        phone: body.phone
     })
-    saveImage(product, body.image)
-    // console.log(product);
+    // saveImage(admin, body.image)
 
     try {
-        const newProduct = await product.save()
-        renderAddPage(res, new Product(), 1)
-    } catch {
-        renderAddPage(res, product, -1)
+        adminService.add(admin)
+        req.flash('success','Admin account added')
+        renderAddPage(res, adminService.new())
+    } catch (err) {
+        console.log(err);
+        renderAddPage(res, admin)
     }
 }
 
@@ -124,21 +125,8 @@ exports.delete = async function (req, res) {
     }
 }
 
-const flash = require('express-flash')
-async function renderAddPage(req, res, product, flag = 0) {
-    try {
-        const params = {
-            product: product,
-            everySize: Product.everySize
-        }
-        // if (flag == -1) params.error = 'Error creating product'
-        // else if (flag == 1) params.success = 'Product created'
-        req.flash('error', 'TEST ERROR')
-        res.render('./products/add', params)
-    } catch (err) {
-        console.log(err);
-        res.redirect('/products')
-    }
+async function renderAddPage(res, admin) {
+    res.render('accounts/add', {account: admin})
 }
 
 async function renderEditPage(res, page, product, flag = 0) {
@@ -146,7 +134,7 @@ async function renderEditPage(res, page, product, flag = 0) {
         const params = {
             product: product,
             page: page,
-            everySize: Product.everySize
+            everySize: Admin.everySize
         }
         if (flag == -1) params.error = 'Error editting product'
         else if (flag == 1) params.success = 'Product editted'

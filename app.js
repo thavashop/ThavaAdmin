@@ -56,6 +56,7 @@ app.use((req,res,next) => {
 app.use('/', require('./routes/index'));
 app.use('/', require('./components/auth'));
 app.use('/products', auth.authGuard, require('./components/product'));
+app.use('/accounts', auth.authGuard, require('./components/admin'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
