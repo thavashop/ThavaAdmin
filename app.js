@@ -13,14 +13,8 @@ const auth = require('./components/auth/guard')
 const passportConfig = require('./components/auth/passport-config')
 passportConfig(passport)
 
-// hbs helpers
-const hbs = require('hbs')
-hbs.registerHelper('equals', function (v1, v2) {
-  return v1 == v2;
-});
-hbs.registerHelper('inc', (v) => v+1)
-hbs.registerHelper('dec', (v) => v-1)
-hbs.registerHelper('in', (v, pool) => pool.includes(v))
+// hbs
+require('./config/hbs-config')
 
 const app = express();
 
@@ -46,8 +40,8 @@ app.use(passport.session())
 
 // Global consts
 app.use((req,res,next) => {
-  res.locals.successMes = req.flash('successMes')
-  res.locals.errorMes = req.flash('errorMes')
+  // res.locals.successMes = req.flash('successMes')
+  // res.locals.errorMes = req.flash('errorMes')
   if (req.user) res.locals.adminName = req.user.name
   next()
 })

@@ -7,75 +7,7 @@
         <div class="card-body">
             <div class="basic-form">
                 <form action="/products" method="post">
-                    {{#with product}}
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="name" value="{{name}}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Price</label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" name="price" value={{price}}>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Brand</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="brand" value={{brand}}>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Material</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="material" value="{{material}}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Color</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="color" value="{{color}}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Care</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="sel1" name="care">
-                                <option>Machine Wash</option>
-                                <option selected>Hand Wash Only</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Size</label>
-                        <div class="col-sm-10">
-                            <div class="form-group">
-                                {{#each ../everySize}}
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input" name="size" value="{{this}}"
-                                            {{#if (in this ../size)}}checked{{/if}}>{{this}}
-                                    </label>
-                                </div>
-                                {{/each}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Image</label>
-                        <div class="col-sm-10">
-                            <input type="file" name="image" class="filepond">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Description</label>
-                        <div class="col-sm-10">
-                            <textarea class="form-control" rows="4" id="comment"
-                                name="description">{{description}}</textarea>
-                        </div>
-                    </div>
-                    {{/with}}
+                    {{> productForm}}
                     <div class="d-sm-flex justify-content-between">
                         <div></div>
                         <div>
@@ -84,17 +16,7 @@
                         </div>
                     </div>
                 </form>
-
-                {{!-- Notification --}}
-                {{#if messages.error}}
-                    {{messages.error}}
-                {{/if}}
-                {{#if errMessage}}
-                <div class="alert alert-danger">{{errMessage}}</div>
-                {{/if}}
-                {{#if success}}
-                <div class="alert alert-success">{{success}}</div>
-                {{/if}}
+                {{> notifications}}
             </div>
         </div>
     </div>

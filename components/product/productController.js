@@ -133,7 +133,6 @@ async function renderAddPage(req, res, product, flag = 0) {
         }
         // if (flag == -1) params.error = 'Error creating product'
         // else if (flag == 1) params.success = 'Product created'
-        req.flash('error', 'TEST ERROR')
         res.render('./products/add', params)
     } catch (err) {
         console.log(err);

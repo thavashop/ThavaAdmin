@@ -12,12 +12,7 @@
         </ol>
     </div>
 </div>
-{{#if error}}
-<div class="alert alert-danger">{{error}}</div>
-{{/if}}
-{{#if success}}
-<div class="alert alert-success">{{success}}</div>
-{{/if}}
+{{> notifications}}
 <div></div>
 <div class="row">
     <div class="col-12">
@@ -99,12 +94,7 @@
                             </tr>
                             {{/each}}
                         </tbody>
-                        <tfoot>
-                            {{!-- <tr>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Description</th>
-                            </tr> --}}
+                        <tfoot>      
                             <ul class="pagination pagination-gutter">
                                 <li class="page-item page-indicator">
                                     <a class="page-link" href="/products?page={{dec page}}">
