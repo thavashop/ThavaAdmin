@@ -1,8 +1,5 @@
 const adminService = require('./adminService')
 const Admin = adminService.model
-const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
-
-const flash = require('express-flash')
 
 exports.list = async (req, res) => {
     try {
@@ -14,11 +11,6 @@ exports.list = async (req, res) => {
         const q = req.query
         let page = q.page == null ? 0 : q.page - 1
         page = Math.max(0, Math.min(page, nPage-1))
-        // let clampedPage = Math.max(0, Math.min(page, nPage-1))
-        // if (page != clampedPage) {
-        //     clampedPage = clampedPage + 1
-        //     res.redirect('/products?page='+clampedPage)    
-        // }
         const admins = await adminService.findByPage(page, itemPerPage)
 
         // notification
@@ -54,7 +46,6 @@ exports.add = async (req, res) => {
         email: body.email,
         phone: body.phone
     })
-    // saveImage(admin, body.image)
 
     try {
         adminService.add(admin)
@@ -78,8 +69,7 @@ exports.add = async (req, res) => {
 
 exports.edit = async function (req, res) {
     try {
-        const body = req.body
-        await adminService.edit(req.user.id, body)
+        await adminService.edit(req.user.id, req.body)
         req.flash('success','Profile editted')
         res.redirect('/accounts/profile')
     } catch (err) {
@@ -109,29 +99,4 @@ exports.view = async (req, res) => {
 
 async function renderAddPage(res, admin) {
     res.render('accounts/add', {account: admin})
-}
-
-async function renderEditPage(res, page, product, flag = 0) {
-    try {
-        const params = {
-            product: product,
-            page: page,
-            everySize: Admin.everySize
-        }
-        if (flag == -1) params.error = 'Error editting product'
-        else if (flag == 1) params.success = 'Product editted'
-        res.render('products/edit', params)
-    } catch (err) {
-        console.log(err);
-        res.redirect('/products')
-    }
-}
-
-function saveImage(product, imageEncoded) {
-    if (imageEncoded == null || imageEncoded == '') return
-    const image = JSON.parse(imageEncoded)
-    if (image != null && imageMineTypes.includes(image.type)) {
-        product.image = new Buffer.from(image.data, 'base64')
-        product.imageType = image.type
-    }
 }

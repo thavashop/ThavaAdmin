@@ -19,30 +19,22 @@ exports.list = async function (req, res) {
         // }
         const products = await productService.findByPage(page, itemPerPage)
 
-        // notification
-        let success
-        let error
-        if (q.del == 1) success = 'Product deleted'
-        if (q.del == 0) error = "There's a problem deleting product"
-        if (q.edt == 1) success = 'Product editted'
-        res.render('index', {
+        res.render('products/index', {
             page: page + 1,
             pages: pages,
             products: products,
-            success: success,
-            error: error
         });
     } catch (err) {
         console.log(err);
-        res.render('index')
+        res.render('products/index')
     }
 }
 
-exports.renderAdd = async (req, res) => {
-    renderAddPage(req, res, new Product())
+exports.renderAdd = async (req, res) => {    
+    renderAddPage(res, new Product())
 }
 
-exports.add = async function (req, res) {
+exports.add = async (req, res) => {
     const body = req.body
     const product = new Product({
         name: body.name,
@@ -55,17 +47,18 @@ exports.add = async function (req, res) {
         size: body.size
     })
     saveImage(product, body.image)
-    // console.log(product);
 
     try {
-        const newProduct = await product.save()
-        renderAddPage(res, new Product(), 1)
+        await product.save()
+        req.flash('success','Product created')
+        renderAddPage(res, new Product())
     } catch {
-        renderAddPage(res, product, -1)
+        req.flash('error','Product create failed')
+        renderAddPage(res, product)
     }
 }
 
-exports.renderEdit = async function (req, res) {
+exports.renderEdit = async (req, res) => {
     try {
         const product = await productService.findById(req.params.id)
         renderEditPage(res, req.query.page, product)
@@ -76,21 +69,10 @@ exports.renderEdit = async function (req, res) {
 }
 
 exports.edit = async function (req, res) {
-    const id = req.params.id
     let product
     try {
         const body = req.body
-        // const dummy = new Product()
-        // saveImage(dummy, body.image)
-        // const result = await Product.updateOne({_id: id}, {$set: {
-        //     name: body.name,
-        //     price: body.price,
-        //     description: body.description,
-        //     image: dummy.image,
-        //     imageType: dummy.imageType
-        // }})
-        // console.log(result);
-        product = await productService.findById(id)
+        product = await productService.findById(req.params.id)
         with (product) {
             name = body.name
             price = body.price
@@ -103,11 +85,12 @@ exports.edit = async function (req, res) {
         }
         saveImage(product, body.image)
         await product.save()
-        // renderEditPage(res, product, 1)
-        res.redirect('/products?edt=1&page=' + req.query.page)
+        req.flash('success', 'Product editted')
+        res.redirect('/products?&page=' + req.query.page)
     } catch (err) {
         console.log(err);
-        renderEditPage(res, req.query.page, product, -1)
+        req.flash('error', 'Product edit failed')
+        renderEditPage(res, req.query.page, product)
     }
 }
 
@@ -115,45 +98,27 @@ exports.delete = async function (req, res) {
     try {
         const result = await productService.deleteOne(req.params.id)
         console.log(result);
-        // res.render('/products', { success: 'Product deleted' })
-        res.redirect('/products?del=1&page=' + req.query.page)
+        req.flash('success', 'Product deleted')
     } catch (err) {
         console.log(err);
-        // res.render('/products', { error: "There's a problem deleting product" })
-        res.redirect('/products?del=0&page=' + req.query.page)
+        req.flash('error', 'Product delete failed')
     }
+    res.redirect('/products?page=' + req.query.page)
 }
 
-const flash = require('express-flash')
-async function renderAddPage(req, res, product, flag = 0) {
-    try {
-        const params = {
-            product: product,
-            everySize: Product.everySize
-        }
-        // if (flag == -1) params.error = 'Error creating product'
-        // else if (flag == 1) params.success = 'Product created'
-        res.render('./products/add', params)
-    } catch (err) {
-        console.log(err);
-        res.redirect('/products')
-    }
+async function renderAddPage(res, product) {  
+    res.render('./products/add', {
+        product: product,
+        everySize: Product.everySize
+    })
 }
 
-async function renderEditPage(res, page, product, flag = 0) {
-    try {
-        const params = {
-            product: product,
-            page: page,
-            everySize: Product.everySize
-        }
-        if (flag == -1) params.error = 'Error editting product'
-        else if (flag == 1) params.success = 'Product editted'
-        res.render('products/edit', params)
-    } catch (err) {
-        console.log(err);
-        res.redirect('/products')
-    }
+async function renderEditPage(res, page, product) {
+    res.render('products/edit', {
+        product: product,
+        page: page,
+        everySize: Product.everySize
+    })
 }
 
 function saveImage(product, imageEncoded) {
