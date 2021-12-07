@@ -2,18 +2,21 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./adminController.js')
 
-// product list
+// view profile
+router.get('/profile', controller.view)
+
+// account list
 router.get('/', controller.list);
 
-// add product
+// add account
 router.get('/add', controller.renderAdd);
 router.post('/', controller.add)
 
-// edit product
-router.get('/:id/edit', controller.renderEdit)
-router.put('/:id', controller.edit)
+// edit profile
+// router.get('/:id/edit', controller.renderEdit)
+router.put('/', controller.edit)
 
-// delete product
-router.delete('/:id', controller.delete)
+// delete account
+// router.delete('/:id', controller.delete)
 
 module.exports = router;

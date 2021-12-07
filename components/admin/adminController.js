@@ -66,63 +66,45 @@ exports.add = async (req, res) => {
     }
 }
 
-exports.renderEdit = async function (req, res) {
-    try {
-        const product = await productService.findById(req.params.id)
-        renderEditPage(res, req.query.page, product)
-    } catch (err) {
-        console.log(err);
-        res.redirect('products')
-    }
-}
+// exports.renderEdit = async function (req, res) {
+//     try {
+//         const product = await productService.findById(req.params.id)
+//         renderEditPage(res, req.query.page, product)
+//     } catch (err) {
+//         console.log(err);
+//         res.redirect('products')
+//     }
+// }
 
 exports.edit = async function (req, res) {
-    const id = req.params.id
-    let product
     try {
         const body = req.body
-        // const dummy = new Product()
-        // saveImage(dummy, body.image)
-        // const result = await Product.updateOne({_id: id}, {$set: {
-        //     name: body.name,
-        //     price: body.price,
-        //     description: body.description,
-        //     image: dummy.image,
-        //     imageType: dummy.imageType
-        // }})
-        // console.log(result);
-        product = await productService.findById(id)
-        with (product) {
-            name = body.name
-            price = body.price
-            description = body.description
-            brand = body.brand
-            material = body.material
-            care = body.care
-            color = body.color
-            size = body.size
-        }
-        saveImage(product, body.image)
-        await product.save()
-        // renderEditPage(res, product, 1)
-        res.redirect('/products?edt=1&page=' + req.query.page)
+        await adminService.edit(req.user.id, body)
+        req.flash('success','Profile editted')
+        res.redirect('/accounts/profile')
     } catch (err) {
         console.log(err);
-        renderEditPage(res, req.query.page, product, -1)
+        req.flash('error','Profile edit failed')
+        res.redirect('/accounts/profile')
     }
 }
 
-exports.delete = async function (req, res) {
-    try {
-        const result = await productService.deleteOne(req.params.id)
-        console.log(result);
-        // res.render('/products', { success: 'Product deleted' })
-        res.redirect('/products?del=1&page=' + req.query.page)
-    } catch (err) {
-        console.log(err);
-        // res.render('/products', { error: "There's a problem deleting product" })
-        res.redirect('/products?del=0&page=' + req.query.page)
-    }
+// exports.delete = async function (req, res) {
+//     try {
+//         const result = await productService.deleteOne(req.params.id)
+//         console.log(result);
+//         // res.render('/products', { success: 'Product deleted' })
+//         res.redirect('/products?del=1&page=' + req.query.page)
+//     } catch (err) {
+//         console.log(err);
+//         // res.render('/products', { error: "There's a problem deleting product" })
+//         res.redirect('/products?del=0&page=' + req.query.page)
+//     }
+// }
+
+exports.view = async (req, res) => {
+    const admin = await adminService.findById(req.user.id)
+    res.render('accounts/profile', {account: admin})
 }
 
 async function renderAddPage(res, admin) {
