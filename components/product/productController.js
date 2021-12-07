@@ -50,10 +50,10 @@ exports.add = async (req, res) => {
 
     try {
         await product.save()
-        req.flash('success','Product created')
+        req.flash('success','Product added')
         renderAddPage(res, new Product())
     } catch {
-        req.flash('error','Product create failed')
+        req.flash('error','Product add failed')
         renderAddPage(res, product)
     }
 }

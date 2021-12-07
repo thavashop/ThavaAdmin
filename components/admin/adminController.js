@@ -48,11 +48,12 @@ exports.add = async (req, res) => {
     })
 
     try {
-        adminService.add(admin)
+        await adminService.add(admin)
         req.flash('success','Admin account added')
         renderAddPage(res, adminService.new())
     } catch (err) {
         console.log(err);
+        req.flash('error','Admin account add failed')
         renderAddPage(res, admin)
     }
 }
