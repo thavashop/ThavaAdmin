@@ -4,7 +4,7 @@ exports.list = () => Product.find({}).lean()
 
 exports.count = () => Product.count({}).exec()
 
-exports.findByPage = (page, itemPerPage) => Product.find({}).skip(page * itemPerPage).limit(itemPerPage)
+exports.findByPage = (page, itemPerPage) => Product.find({}).skip(page * itemPerPage).limit(itemPerPage).lean({virtuals: true})
 
 exports.findById = (id) => Product.findById(id)
 
