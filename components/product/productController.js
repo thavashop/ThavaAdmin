@@ -107,14 +107,14 @@ exports.delete = async function (req, res) {
 }
 
 async function renderAddPage(res, product) {  
-    res.render('./product/views//add', {
+    res.render('./product/views/add', {
         product: product,
         everySize: Product.everySize
     })
 }
 
 async function renderEditPage(res, page, product) {
-    res.render('product/views//edit', {
+    res.render('product/views/edit', {
         product: product,
         page: page,
         everySize: Product.everySize

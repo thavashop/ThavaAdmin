@@ -2,18 +2,21 @@ var express = require('express');
 var router = express.Router();
 const controller = require('./orderController')
 
-// product list
+// order list
 router.get('/', controller.list);
 
-// add product
+// order details
+router.get('/:id', controller.details)
+
+// add order
 router.get('/add', controller.renderAdd);
 router.post('/', controller.add)
 
-// edit product
-router.get('/:id/edit', controller.renderEdit)
-router.put('/:id', controller.edit)
+// edit order
+// router.get('/:id/edit', controller.renderEdit)
+router.get('/:id/edit', controller.edit)
 
-// delete product
+// delete order
 router.delete('/:id', controller.delete)
 
 module.exports = router;

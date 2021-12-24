@@ -1,0 +1,86 @@
+{{!-- <div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4>Hi, welcome back!</h4>
+            <span class="ml-1">{{adminName}}</span>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Accounts</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">List</a></li>
+        </ol>
+    </div>
+</div> --}}
+{{> notifications}}
+<div></div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Admin accounts Datatable</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <table id="example" class="display" style="min-width: 845px">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Payment Type</th>
+                            </tr>
+                        </thead>
+                        <tbody style="color: black;">
+                            {{#each orders}}
+                            <tr>
+                                <td>{{_id}}</td>
+                                <td>{{customer.username}}</td>
+                                <td>{{date}}</td>
+                                <td>{{status}}</td>
+                                <td>{{paymentType}}</td>
+                                <td style="white-space: nowrap;">
+                                    <div class="dropdown show">
+                                        <button type="button" class="btn btn-primary dropdown-toggle"
+                                            data-toggle="dropdown" aria-expanded="true">
+                                            Flag status
+                                        </button>
+                                        <div class="dropdown-menu" x-placement="bottom-start"
+                                            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);">
+                                            <a class="dropdown-item" href="/orders/{{_id}}/edit?status=notDelivered">Not delivered</a>
+                                            <a class="dropdown-item" href="/orders/{{_id}}/edit?status=delivering">Delivering</a>
+                                            <a class="dropdown-item" href="/orders/{{_id}}/edit?status=delivered">Delivered</a>
+                                        </div>
+                                        <a href="/orders/{{_id}}">
+                                            <button type="button" class="btn btn-outline-primary">View</button>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                        <tfoot>
+                            {{!-- <ul class="pagination pagination-gutter">
+                                <li class="page-item page-indicator">
+                                    <a class="page-link" href="/products?page={{dec page}}">
+                                        <i class="icon-arrow-left"></i></a>
+                                </li>
+                                {{#each pages}}
+                                <li class="page-item {{#if (equals ../page this)}}active{{/if}}">
+                                    <a class="page-link" href="/products?page={{this}}">{{this}}</a>
+                                </li>
+                                {{/each}}
+                                <li class="page-item page-indicator">
+                                    <a class="page-link" href="/products?page={{inc page}}">
+                                        <i class="icon-arrow-right"></i></a>
+                                </li>
+                            </ul> --}}
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
