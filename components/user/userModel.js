@@ -25,6 +25,10 @@ const schema = mongoose.Schema({
     //     type: String,
     //     required: true
     // },
+    status: {
+        type: String,
+        default: 'inactivated'
+    }
 })
 
 module.exports = mongoose.model('User', schema, 'user')

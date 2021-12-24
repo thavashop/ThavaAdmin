@@ -1,86 +1,37 @@
-<div class="card-body">
-    <div class="profile-tab">
-        <div class="custom-tab-1">
-            <ul class="nav nav-tabs">
-                <li class="nav-item"><a href="#about-me" data-toggle="tab" class="nav-link active">About Me</a>
-                </li>
-                <li class="nav-item"><a href="#profile-settings" data-toggle="tab" class="nav-link">Edit profile</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                {{#with account}}
-                <div id="about-me" class="tab-pane fade active show">
-                    <div class="pt-4 border-bottom-1 pb-4 profile-personal-info">
-                        <h4 class="text-primary mb-4">Personal Information</h4>
-                        <div class="row mb-4">
-                            <div class="col-3">
-                                <h5 class="f-w-500">Name <span class="pull-right">:</span>
-                                </h5>
-                            </div>
-                            <div class="col-9"><span>{{firstName}} {{lastName}}</span>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-3">
-                                <h5 class="f-w-500">Username <span class="pull-right">:</span>
-                                </h5>
-                            </div>
-                            <div class="col-9"><span>{{username}}</span>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-3">
-                                <h5 class="f-w-500">Email <span class="pull-right">:</span>
-                                </h5>
-                            </div>
-                            <div class="col-9"><span>{{email}}</span>
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-3">
-                                <h5 class="f-w-500">Phone <span class="pull-right">:</span>
-                                </h5>
-                            </div>
-                            <div class="col-9"><span>{{phone}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="profile-settings" class="tab-pane fade">
-                    <div class="pt-3">
-                        <div class="settings-form">
-                            <h4 class="text-primary">Edit Profile</h4>
-                            <form action="/admins?_method=PUT" method="post">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>First Name</label>
-                                        <input type="text" class="form-control" name="firstName" value="{{firstName}}">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Last Name</label>
-                                        <input type="text" class="form-control" name="lastName" value="{{lastName}}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="email" class="form-control" name="email" value="{{email}}">
-                                </div>
-                                <div class="form-group">
-                                    <label>Phone</label>
-                                    <input type="text" class="form-control" name="phone" value="{{phone}}">
-                                </div>
-                                <button class="btn btn-primary" type="submit">Save changes</button>
-                                <a href="/admins/profile">
-                                    <button type="button" class="btn btn-light">Cancel</button>
-                                </a>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                {{/with}}
-            </div>
-
-            {{> notifications}}            
+<div class="pt-4 border-bottom-1 pb-4 profile-personal-info">
+    <h4 class="text-primary mb-4">User Information</h4>
+    {{!-- <div class="row mb-4">
+        <div class="col-3">
+            <h5 class="f-w-500">Name <span class="pull-right">:</span>
+            </h5>
+        </div>
+        <div class="col-9"><span>{{firstName}} {{lastName}}</span>
+        </div>
+    </div> --}}
+    {{#with user}}        
+    <div class="row mb-4">
+        <div class="col-3">
+            <h5 class="f-w-500">Username <span class="pull-right">:</span>
+            </h5>
+        </div>
+        <div class="col-9"><span>{{username}}</span>
         </div>
     </div>
+    <div class="row mb-4">
+        <div class="col-3">
+            <h5 class="f-w-500">Email <span class="pull-right">:</span>
+            </h5>
+        </div>
+        <div class="col-9"><span>{{email}}</span>
+        </div>
+    </div>
+    {{/with}}
+    {{!-- <div class="row mb-4">
+        <div class="col-3">
+            <h5 class="f-w-500">Phone <span class="pull-right">:</span>
+            </h5>
+        </div>
+        <div class="col-9"><span>{{phone}}</span>
+        </div>
+    </div> --}}
 </div>

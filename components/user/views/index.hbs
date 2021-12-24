@@ -18,7 +18,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Admin accounts Datatable</h4>
+                <h4 class="card-title">User accounts Datatable</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -26,20 +26,37 @@
                         <thead>
                             <tr>
                                 <th>Username</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
+                                {{!-- <th>First Name</th>
+                                <th>Last Name</th> --}}
                                 <th>Email</th>
-                                <th>Phone</th>
+                                {{!-- <th>Phone</th> --}}
+                                <th>Status</th>
+                                <th>Control</th>
                             </tr>
                         </thead>
                         <tbody style="color: black;">
                             {{#each accounts}}
                             <tr>
                                 <td>{{username}}</td>
-                                <td>{{firstName}}</td>
-                                <td>{{lastName}}</td>
+                                {{!-- <td>{{firstName}}</td>
+                                <td>{{lastName}}</td> --}}
                                 <td>{{email}}</td>
-                                <td>{{phone}}</td>
+                                {{!-- <td>{{phone}}</td> --}}
+                                <td>{{status}}</td>
+                                <td>
+                                    <a href="/users/{{_id}}">
+                                        <button type="button" class="btn btn-outline-primary">View</button>
+                                    </a>
+                                    {{#if (equals status 'banned')}}
+                                    <a href="/users/{{_id}}/unban">
+                                        <button type="button" class="btn btn-outline-success">Unban</button>
+                                    </a>
+                                    {{else}}
+                                    <a href="/users/{{_id}}/ban">
+                                        <button type="button" class="btn btn-outline-danger">Ban</button>
+                                    </a>
+                                    {{/if}}
+                                </td>
                             </tr>
                             {{/each}}
                         </tbody>
@@ -51,7 +68,8 @@
                                 </li>
                                 {{#each pages}}
                                 <li class="page-item {{#if (equals ../page this)}}active{{/if}}">
-                                    <a class="page-link" href="/products?page={{this}}">{{this}}</a></li>
+                                    <a class="page-link" href="/products?page={{this}}">{{this}}</a>
+                                </li>
                                 {{/each}}
                                 <li class="page-item page-indicator">
                                     <a class="page-link" href="/products?page={{inc page}}">
