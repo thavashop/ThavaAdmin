@@ -4,29 +4,16 @@ const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
 
 exports.list = async function (req, res) {
     try {
-        // pagination        
-        const itemPerPage = 5
-        const nProduct = await productService.count()
-        const nPage = Math.ceil(nProduct / itemPerPage)
-        const pages = Array.from(Array(nPage), (_, i) => i + 1)
-        const q = req.query
-        let page = q.page == null ? 0 : q.page - 1
-        page = Math.max(0, Math.min(page, nPage-1))
-        // let clampedPage = Math.max(0, Math.min(page, nPage-1))
-        // if (page != clampedPage) {
-        //     clampedPage = clampedPage + 1
-        //     res.redirect('/products?page='+clampedPage)    
-        // }
-        const products = await productService.findByPage(page, itemPerPage)
+        const orders = await orderService.findAll()
 
-        res.render('product/views//index', {
+        res.render('products/index', {
             page: page + 1,
             pages: pages,
-            products: products,
+            products: orders,
         });
     } catch (err) {
         console.log(err);
-        res.render('product/views//index')
+        res.render('products/index')
     }
 }
 
@@ -107,14 +94,14 @@ exports.delete = async function (req, res) {
 }
 
 async function renderAddPage(res, product) {  
-    res.render('./product/views//add', {
+    res.render('./products/add', {
         product: product,
         everySize: Product.everySize
     })
 }
 
 async function renderEditPage(res, page, product) {
-    res.render('product/views//edit', {
+    res.render('products/edit', {
         product: product,
         page: page,
         everySize: Product.everySize

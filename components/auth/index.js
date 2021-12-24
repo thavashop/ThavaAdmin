@@ -4,7 +4,7 @@ const passport = require('passport');
 const auth = require('./guard')
 
 // Render sign in
-router.get('/signin', auth.unauthGuard, (req, res) => res.render('signin', {layout: 'emptyLayout'}))
+router.get('/signin', auth.unauthGuard, (req, res) => res.render('auth/views/signin', {layout: 'emptyLayout'}))
 
 // Sign in
 router.post('/signin', auth.unauthGuard, passport.authenticate('local', {

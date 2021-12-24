@@ -14,14 +14,14 @@ exports.list = async (req, res) => {
         const admins = await adminService.findByPage(page, itemPerPage)
 
         // notification
-        res.render('accounts/index', {
+        res.render('admin/views/index', {
             page: page + 1,
             pages: pages,
             accounts: admins,
         });
     } catch (err) {
         console.log(err);
-        res.render('accounts/index')
+        res.render('admin/views/index')
     }
 }
 
@@ -72,11 +72,11 @@ exports.edit = async function (req, res) {
     try {
         await adminService.edit(req.user.id, req.body)
         req.flash('success','Profile editted')
-        res.redirect('/accounts/profile')
+        res.redirect('/admins/profile')
     } catch (err) {
         console.log(err);
         req.flash('error','Profile edit failed')
-        res.redirect('/accounts/profile')
+        res.redirect('/admins/profile')
     }
 }
 
@@ -95,9 +95,9 @@ exports.edit = async function (req, res) {
 
 exports.view = async (req, res) => {
     const admin = await adminService.findById(req.user.id)
-    res.render('accounts/profile', {account: admin})
+    res.render('admin/views/profile', {account: admin})
 }
 
 async function renderAddPage(res, admin) {
-    res.render('accounts/add', {account: admin})
+    res.render('admin/views/add', {account: admin})
 }
