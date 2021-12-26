@@ -206,6 +206,14 @@
             </ul>
           </li>
 
+          <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                class="icon icon-chart-bar-33"></i><span class="nav-text">Analysis</span></a>
+            <ul aria-expanded="false">
+              <li><a href="/products/top">Top 10 best-seller products</a></li>
+              <li><a href="/orders/analysis">Sales by time periods</a></li>
+            </ul>
+          </li>
+
           {{!-- <li class="nav-label">Apps</li>
           <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                 class="icon icon-app-store"></i><span class="nav-text">Apps</span></a>
@@ -389,6 +397,16 @@
 
     FilePond.parse(document.body);
   </script>
+
+  <script src="/vendor/peity/jquery.peity.min.js"></script><!-- scripit init-->
+  <script defer src="/vendor/peity/peitychart.init.js"></script><!-- scripit init-->
+  <script>
+    $("span.pie").peity("pie", {
+      width: '50',
+      height: '50'
+    })
+  </script>
+
 
 </body>
 

@@ -5,6 +5,9 @@ const controller = require('./productController')
 // product list
 router.get('/', controller.list);
 
+// best sellers list
+router.get('/top', controller.top);
+
 // add product
 router.get('/add', controller.renderAdd);
 router.post('/', controller.add)

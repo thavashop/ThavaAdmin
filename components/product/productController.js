@@ -106,6 +106,15 @@ exports.delete = async function (req, res) {
     res.redirect('/products?page=' + req.query.page)
 }
 
+exports.top = async (req, res) => {
+    try {
+        const products = await productService.top(10)
+        res.render('product/views/top', {products})
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function renderAddPage(res, product) {  
     res.render('./product/views/add', {
         product: product,

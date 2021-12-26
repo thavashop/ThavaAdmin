@@ -29,27 +29,45 @@ exports.renderAdd = async (req, res) => {
     renderAddPage(res, orderService.new())
 }
 
+exports.analysis = async (req, res) => {
+    try {
+        const orders = await orderService.sortedByDate()
+        const data = {}
+        orders.forEach(order => {
+            const day = order.date.getDate()
+            const num = order.details.reduce((sum, entry) => sum + Number(entry.amount), 0)
+            if (data[`${day}`] == undefined) {
+                data[`${day}`] = num
+            }
+            else data[`${day}`] += num
+        });
+        res.render('order/views/analysis', {data})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 exports.add = async (req, res) => {
     const body = req.body
 
     // test
     const User = require('../user/userModel')
-
+    const Product = require('../product/productModel')
     let user
     try {
         user = await User.findById(body.custormer).lean()
     } catch (err) {
         console.log(err);
     }
-
     const a = body.products.split(',')
     let products = []
-    a.forEach(x => {
+    a.forEach(async x => {
         const item = x.split(' ')
         products.push({
             id: item[0],
             amount: item[1]
         })
+        await Product.updateOne({_id: item[0]}, {$inc: {sales: 1}})
     });
 
     const order = new orderService.model({
@@ -70,42 +88,42 @@ exports.add = async (req, res) => {
     }
 }
 
-exports.renderEdit = async (req, res) => {
-    try {
-        const product = await orderService.findById(req.params.id)
-        renderEditPage(res, req.query.page, product)
-    } catch (err) {
-        console.log(err);
-        res.redirect('products')
-    }
-}
+// exports.renderEdit = async (req, res) => {
+//     try {
+//         const product = await orderService.findById(req.params.id)
+//         renderEditPage(res, req.query.page, product)
+//     } catch (err) {
+//         console.log(err);
+//         res.redirect('products')
+//     }
+// }
 
-exports.edit = async (req, res) => {
-    try {
-        let status = req.query.status
-        if (status == 'notDelivered') status = 'Not delivered'
-        else if (status == 'delivering') status = 'Delivering'
-        else if (status == 'delivered') status = 'Delivered'
-        await orderService.updateStatus(req.params.id, status)
+// exports.edit = async (req, res) => {
+//     try {
+//         let status = req.query.status
+//         if (status == 'notDelivered') status = 'Not delivered'
+//         else if (status == 'delivering') status = 'Delivering'
+//         else if (status == 'delivered') status = 'Delivered'
+//         await orderService.updateStatus(req.params.id, status)
 
-        req.flash('success', 'Order status updated')
-        res.redirect('/orders')
-    } catch (err) {
-        console.log(err);
-    }
-}
+//         req.flash('success', 'Order status updated')
+//         res.redirect('/orders')
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
 
-exports.delete = async function (req, res) {
-    try {
-        const result = await orderService.deleteOne(req.params.id)
-        console.log(result);
-        req.flash('success', 'Product deleted')
-    } catch (err) {
-        console.log(err);
-        req.flash('error', 'Product delete failed')
-    }
-    res.redirect('/products?page=' + req.query.page)
-}
+// exports.delete = async function (req, res) {
+//     try {
+//         const result = await orderService.deleteOne(req.params.id)
+//         console.log(result);
+//         req.flash('success', 'Product deleted')
+//     } catch (err) {
+//         console.log(err);
+//         req.flash('error', 'Product delete failed')
+//     }
+//     res.redirect('/products?page=' + req.query.page)
+// }
 
 async function renderAddPage(res, order) {  
     res.render('order/views/add', {order})

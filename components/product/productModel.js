@@ -18,7 +18,11 @@ const schema = mongoose.Schema({
     color: String,
     size: Array,
     imageType: String,
-    description: String
+    description: String,
+    sales: {
+        type: Number,
+        default: 0
+    }
 })
 
 schema.virtual('imageObj').get(function() {

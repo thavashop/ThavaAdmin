@@ -1,0 +1,55 @@
+{{!-- <div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4>Hi, welcome back!</h4>
+            <span class="ml-1">{{adminName}}</span>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="">Products</a></li>
+            <li class="breadcrumb-item active"><a href="">Top10</a></li>
+        </ol>
+    </div>
+</div> --}}
+{{> notifications}}
+<div></div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Top 10 best-seller products</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="example" class="display" style="min-width: 845px">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Sales</th>
+                                <th>Price</th>
+                                <th>Brand</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody style="color: black;">
+                            {{#each products}}
+                            <tr>
+                                <td>{{@index}}</td>
+                                <td><img width="50" height="50" src={{imageObj}}></td>
+                                <td style="max-width: 150px;">{{name}}</td>
+                                <td>{{sales}}</td>
+                                <td>{{price}}</td>
+                                <td>{{brand}}</td>
+                                <td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{description}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

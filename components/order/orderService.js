@@ -39,4 +39,6 @@ exports.updateStatus = async (id, status) => {
     }
 }
 
+exports.sortedByDate = () => Order.find({}).sort({date: 'asc'}).lean()
+
 exports.model = Order

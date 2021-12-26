@@ -10,4 +10,6 @@ exports.findById = (id) => Product.findById(id).lean({virtuals: true})
 
 exports.deleteOne = (id) => Product.deleteOne({ _id: id })
 
+exports.top = (n) => Product.find({}).sort({'sales':'desc'}).limit(n).lean({virtuals: true})
+
 exports.model = Product
