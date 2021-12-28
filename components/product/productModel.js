@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const mongooseLeanVirtuals = require('mongoose-lean-virtuals')
 
 const schema = mongoose.Schema({
     name: {
@@ -10,7 +9,7 @@ const schema = mongoose.Schema({
         type: Number,
         required: true
     },
-    image: Buffer,
+    image: String,
     image2: String,
     material: String,
     care: String,
@@ -24,14 +23,6 @@ const schema = mongoose.Schema({
         default: 0
     }
 })
-
-schema.virtual('imageObj').get(function() {
-    if (this.image != null && this.imageType != null) {
-        return `data:${this.imageType};charset=utf-8;base64,${this.image.toString('base64')}`
-    }
-})
-
-schema.plugin(mongooseLeanVirtuals)
 
 module.exports = mongoose.model('Product', schema, 'product')
 module.exports.everySize = ['S','M','L','XL','XXL']

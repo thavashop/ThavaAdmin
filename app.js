@@ -14,12 +14,12 @@ const passportConfig = require('./components/auth/passport-config')
 passportConfig(passport)
 
 // hbs
-require('./config/hbs-config')
+require('./components/handlebars/hbs-config')
 
 const app = express();
 
 // view engine setup
-app.set('views', [path.join(__dirname, 'views'), path.join(__dirname, 'components')]);
+app.set('views', [path.join(__dirname, 'components/handlebars/views'), path.join(__dirname, 'components')]);
 app.set('view engine', 'hbs');
 
 // Middlewares
@@ -47,7 +47,7 @@ app.use((req,res,next) => {
 })
 
 // Routes
-app.use('/', require('./routes/index'));
+app.get('/', (req, res) => res.redirect('/signin'));
 app.use('/', require('./components/auth'));
 app.use('/products', auth.authGuard, require('./components/product'));
 app.use('/admins', auth.authGuard, require('./components/admin'));

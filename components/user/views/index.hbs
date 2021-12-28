@@ -1,24 +1,23 @@
-<div class="row page-titles mx-0">
-    <div class="col-sm-6 p-md-0">
-        <div class="welcome-text">
-            <h4>Hi, welcome back!</h4>
-            <span class="ml-1">{{adminName}}</span>
-        </div>
-    </div>
-    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Accounts</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">List</a></li>
-        </ol>
-    </div>
-</div>
+{{> welcome from='Users' to='List'}}
 {{> notifications}}
 <div></div>
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">User accounts Datatable</h4>
+                <h4 class="card-title">User accounts management</h4>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">
+                        Entries per page
+                    </button>
+                    <div class="dropdown-menu" x-placement="top-start"
+                        style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -107px, 0px);">
+                        {{#each options}}
+                            <a class="dropdown-item {{#if (equals this ../itemPerPage)}}active{{/if}}" href="?itemPerPage={{this}}">{{this}}</a>  
+                        {{/each}}
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -61,23 +60,9 @@
                             {{/each}}
                         </tbody>
                         <tfoot>
-                            {{!-- <ul class="pagination pagination-gutter">
-                                <li class="page-item page-indicator">
-                                    <a class="page-link" href="/products?page={{dec page}}">
-                                        <i class="icon-arrow-left"></i></a>
-                                </li>
-                                {{#each pages}}
-                                <li class="page-item {{#if (equals ../page this)}}active{{/if}}">
-                                    <a class="page-link" href="/products?page={{this}}">{{this}}</a>
-                                </li>
-                                {{/each}}
-                                <li class="page-item page-indicator">
-                                    <a class="page-link" href="/products?page={{inc page}}">
-                                        <i class="icon-arrow-right"></i></a>
-                                </li>
-                            </ul> --}}
                         </tfoot>
                     </table>
+                    {{> pagination}}
                 </div>
             </div>
         </div>

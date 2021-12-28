@@ -1,24 +1,11 @@
-<div class="row page-titles mx-0">
-    <div class="col-sm-6 p-md-0">
-        <div class="welcome-text">
-            <h4>Hi, welcome back!</h4>
-            <span class="ml-1">{{adminName}}</span>
-        </div>
-    </div>
-    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Products</a></li>
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">List</a></li>
-        </ol>
-    </div>
-</div>
+{{> welcome from='Products' to='List'}}
 {{> notifications}}
 <div></div>
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Product Datatable</h4>
+                <h4 class="card-title">Products management</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -39,15 +26,19 @@
                         <tbody style="color: black;">
                             {{#each products}}
                             <tr>
-                                <td><img width="50" height="50" src={{imageObj}}></td>
+                                <td><img width="50" height="50" src={{image}}></td>
                                 <td style="max-width: 150px;">{{name}}</td>
                                 <td>{{price}}</td>
                                 <td>{{brand}}</td>
                                 <td>{{color}}</td>
-                                <td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{material}}</td>
+                                <td
+                                    style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                    {{material}}</td>
                                 <td>{{size}}</td>
                                 <td>{{care}}</td>
-                                <td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{description}}</td>
+                                <td
+                                    style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                    {{description}}</td>
                                 <td style="max-width: fit-content;">
                                     <div class="d-sm-flex justify-content-between">
                                         <div></div>
@@ -55,9 +46,6 @@
                                             <a href="/products/{{id}}/edit?page={{../page}}">
                                                 <button type="button" class="btn btn-outline-primary">Edit</button>
                                             </a>
-
-                                            {{!-- <button type="button" class="btn btn-outline-danger">Delete</button>
-                                            --}}
                                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                                                 data-target="#basicModal{{id}}">Delete</button>
 
@@ -77,7 +65,8 @@
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-dismiss="modal">Cancel</button>
-                                                            <form action="/products/{{id}}?_method=DELETE&page={{../page}}"
+                                                            <form
+                                                                action="/products/{{id}}?_method=DELETE&page={{../page}}"
                                                                 method="post">
                                                                 <button type="submit"
                                                                     class="btn btn-danger">Delete</button>
@@ -94,24 +83,10 @@
                             </tr>
                             {{/each}}
                         </tbody>
-                        <tfoot>      
-                            <ul class="pagination pagination-gutter">
-                                <li class="page-item page-indicator">
-                                    <a class="page-link" href="/products?page={{dec page}}">
-                                        <i class="icon-arrow-left"></i></a>
-                                </li>
-                                {{#each pages}}
-                                <li class="page-item {{#if (equals ../page this)}}active{{/if}}">
-                                    <a class="page-link" href="/products?page={{this}}">{{this}}</a></li>
-                                {{!-- <li class="page-item"><a class="page-link" href="/products?page={{this}}">{{this}}</a></li> --}}
-                                {{/each}}
-                                <li class="page-item page-indicator">
-                                    <a class="page-link" href="/products?page={{inc page}}">
-                                        <i class="icon-arrow-right"></i></a>
-                                </li>
-                            </ul>
+                        <tfoot>
                         </tfoot>
                     </table>
+                    {{> pagination}}
                 </div>
             </div>
         </div>

@@ -3,21 +3,23 @@ const userService = require('./userService')
 exports.list = async (req, res) => {
     try {
         // pagination        
-        // const itemPerPage = 10
-        // const nAdmin = await userService.count()
-        // const nPage = Math.ceil(nAdmin / itemPerPage)
-        // const pages = Array.from(Array(nPage), (_, i) => i + 1)
-        // const q = req.query
-        // let page = q.page == null ? 0 : q.page - 1
-        // page = Math.max(0, Math.min(page, nPage-1))
-        // const users = await userService.findByPage(page, itemPerPage)
-        const users = await userService.findAll()
+        let itemPerPage = req.query.itemPerPage
+        if (itemPerPage == undefined) itemPerPage = 10
+        else itemPerPage = Number(itemPerPage)
+        const nAdmin = await userService.count()
+        const nPage = Math.ceil(nAdmin / itemPerPage)
+        const pages = Array.from(Array(nPage), (_, i) => i + 1)
+        const q = req.query
+        let page = q.page == null ? 0 : q.page - 1
+        const users = await userService.findByPage(page, itemPerPage)
 
         // notification
         res.render('user/views/index', {
-            // page: page + 1,
-            // pages: pages,
+            page: page + 1,
+            pages,
+            itemPerPage,
             accounts: users,
+            options: [5,10,15,20]
         });
     } catch (err) {
         console.log(err);

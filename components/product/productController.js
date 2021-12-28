@@ -11,22 +11,16 @@ exports.list = async function (req, res) {
         const pages = Array.from(Array(nPage), (_, i) => i + 1)
         const q = req.query
         let page = q.page == null ? 0 : q.page - 1
-        page = Math.max(0, Math.min(page, nPage-1))
-        // let clampedPage = Math.max(0, Math.min(page, nPage-1))
-        // if (page != clampedPage) {
-        //     clampedPage = clampedPage + 1
-        //     res.redirect('/products?page='+clampedPage)    
-        // }
         const products = await productService.findByPage(page, itemPerPage)
 
-        res.render('product/views//index', {
+        res.render('product/views/index', {
             page: page + 1,
             pages: pages,
             products: products,
         });
     } catch (err) {
         console.log(err);
-        res.render('product/views//index')
+        res.render('product/views/index')
     }
 }
 

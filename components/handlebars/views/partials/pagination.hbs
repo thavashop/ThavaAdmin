@@ -1,0 +1,19 @@
+<ul class="pagination pagination-gutter float-right">
+    {{#if (in (dec page) pages)}}
+    <li class="page-item page-indicator">
+        <a class="page-link" href="?page={{dec page}}{{#if itemPerPage}}&itemPerPage={{itemPerPage}}{{/if}}">
+            <i class="icon-arrow-left"></i></a>
+    </li>
+    {{/if}}
+    {{#each pages}}
+    <li class="page-item {{#if (equals ../page this)}}active{{/if}}">
+        <a class="page-link" href="?page={{this}}{{#if ../itemPerPage}}&itemPerPage={{../itemPerPage}}{{/if}}">{{this}}</a>
+    </li>
+    {{/each}}
+    {{#if (in (inc page) pages)}}
+    <li class="page-item page-indicator">
+        <a class="page-link" href="?page={{inc page}}{{#if itemPerPage}}&itemPerPage={{itemPerPage}}{{/if}}">
+            <i class="icon-arrow-right"></i></a>
+    </li>
+    {{/if}}
+</ul>

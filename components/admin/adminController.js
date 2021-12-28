@@ -10,7 +10,6 @@ exports.list = async (req, res) => {
         const pages = Array.from(Array(nPage), (_, i) => i + 1)
         const q = req.query
         let page = q.page == null ? 0 : q.page - 1
-        page = Math.max(0, Math.min(page, nPage-1))
         const admins = await adminService.findByPage(page, itemPerPage)
 
         // notification
@@ -58,16 +57,6 @@ exports.add = async (req, res) => {
     }
 }
 
-// exports.renderEdit = async function (req, res) {
-//     try {
-//         const product = await productService.findById(req.params.id)
-//         renderEditPage(res, req.query.page, product)
-//     } catch (err) {
-//         console.log(err);
-//         res.redirect('products')
-//     }
-// }
-
 exports.edit = async function (req, res) {
     try {
         await adminService.edit(req.user.id, req.body)
@@ -79,19 +68,6 @@ exports.edit = async function (req, res) {
         res.redirect('/admins/profile')
     }
 }
-
-// exports.delete = async function (req, res) {
-//     try {
-//         const result = await productService.deleteOne(req.params.id)
-//         console.log(result);
-//         // res.render('/products', { success: 'Product deleted' })
-//         res.redirect('/products?del=1&page=' + req.query.page)
-//     } catch (err) {
-//         console.log(err);
-//         // res.render('/products', { error: "There's a problem deleting product" })
-//         res.redirect('/products?del=0&page=' + req.query.page)
-//     }
-// }
 
 exports.view = async (req, res) => {
     const admin = await adminService.findById(req.user.id)

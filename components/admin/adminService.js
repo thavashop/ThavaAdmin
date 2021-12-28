@@ -37,7 +37,7 @@ exports.edit = async (id, changes) => {
         }
         await admin.save()
     } catch (err) {
-        console.log(err);
+        throw err
     }
 }
 
