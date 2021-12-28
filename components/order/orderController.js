@@ -31,17 +31,50 @@ exports.renderAdd = async (req, res) => {
 
 exports.analysis = async (req, res) => {
     try {
+        let period = req.query.period
+        if (period == undefined) period = 'day'
         const orders = await orderService.sortedByDate()
         const data = {}
         orders.forEach(order => {
-            const day = order.date.getDate()
+            const date = order.date
+            const year = date.getYear() + 1900
+            const month = date.getMonth()
+            const day = date.getDate()
+            let key, page
+            switch (period) {
+                case 'day':
+                    key = day
+                    page = month + '.' + year
+                    break;
+                case 'week':
+                    key = Math.ceil(day / 7)
+                    key = Math.max(key,4)
+                    page = month + '.' + year
+                    break
+                case 'month':
+                    key = month
+                    page = year
+                    break
+                case 'quarter':
+                    key = Math.floor(month / 4) + 1
+                    page = year
+                    break
+                case 'year':
+                    key = year
+                    page = ''
+                    break
+            }            
+            if (page != '') key += '.' + page
             const num = order.details.reduce((sum, entry) => sum + Number(entry.amount), 0)
-            if (data[`${day}`] == undefined) {
-                data[`${day}`] = num
+            if (data[`${key}`] == undefined) {
+                data[`${key}`] = num
             }
-            else data[`${day}`] += num
+            else data[`${key}`] += num
         });
-        res.render('order/views/analysis', {data})
+        res.render('order/views/analysis', {
+            days: Object.keys(data),
+            sales: Object.values(data)
+        })
     } catch (error) {
         console.log(error);
     }

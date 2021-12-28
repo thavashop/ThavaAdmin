@@ -1,3 +1,47 @@
-{{#each data }}
-    <div>{{@key}}: {{this}}</div>
-{{/each}}
+{{!-- {{#each data }}
+<div>{{@key}}: {{this}}</div>
+{{/each}} --}}
+<div class="col-lg-12 col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Sales analysis by time periods</h4>
+            <div>
+                <a href="?period=day"><button type="button" class="btn btn-rounded btn-primary">By Days</button></a>
+                <a href="?period=week"><button type="button" class="btn btn-rounded btn-primary">By Weeks</button></a>
+                <a href="?period=month"><button type="button" class="btn btn-rounded btn-primary">By Months</button></a>
+                <a href="?period=quarter"><button type="button" class="btn btn-rounded btn-primary">By Quarters</button></a>
+                <a href="?period=year"><button type="button" class="btn btn-rounded btn-primary">By Years</button></a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="line-smoothing" class="ct-chart ct-golden-section"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function ($) {
+        "use strict"
+
+        //Line Smoothing
+        var chart = new Chartist.Line('#line-smoothing', {
+            labels: '{{days}}'.split(','),
+            series: [
+                [{{ sales }}]
+            ]
+    }, {
+        lineSmooth: Chartist.Interpolation.simple({
+            divisor: 2
+        }),
+        fullWidth: true,
+        chartPadding: {
+            right: 20
+        },
+        low: 0,
+        plugins: [
+            Chartist.plugins.tooltip()
+        ]
+    });
+
+    }) (jQuery);
+</script>
