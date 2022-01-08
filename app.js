@@ -7,7 +7,11 @@ const methodOverride = require('method-override')
 const flash = require('express-flash')
 const session = require('express-session')
 const passport = require('passport')
+const fs = require('fs')
 const auth = require('./components/auth/guard')
+
+// create temp upload folder
+if (!fs.existsSync('./uploads')) fs.mkdirSync('./uploads')
 
 // passport
 const passportConfig = require('./components/auth/passport-config')

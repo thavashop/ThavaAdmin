@@ -1,6 +1,8 @@
 const productService = require('./productService')
+const cloudinary = require('../cloudinary')
 const Product = productService.model
 const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
+const fs = require('fs')
 
 exports.list = async function (req, res) {
     try {
@@ -24,30 +26,23 @@ exports.list = async function (req, res) {
     }
 }
 
-exports.renderAdd = async (req, res) => {    
+exports.renderAdd = async (req, res) => {
     renderAddPage(res, new Product())
 }
 
 exports.add = async (req, res) => {
-    const body = req.body
-    const product = new Product({
-        name: body.name,
-        price: body.price,
-        description: body.description,
-        brand: body.brand,
-        material: body.material,
-        care: body.care,
-        color: body.color,
-        size: body.size
-    })
-    saveImage(product, body.image)
-
+    const product = new Product(req.body)
+    product.image = await Promise.all(req.files.map(async file => {
+        const pathOnCloudinary = `products/${product._id}/${file.filename}`
+        return await uploadToCloudinary(pathOnCloudinary, file.path)
+    }))
     try {
         await product.save()
-        req.flash('success','Product added')
+        req.flash('success', 'Product added')
         renderAddPage(res, new Product())
-    } catch {
-        req.flash('error','Product add failed')
+    } catch (error) {
+        console.log(error);
+        req.flash('error', 'Product add failed')
         renderAddPage(res, product)
     }
 }
@@ -103,13 +98,13 @@ exports.delete = async function (req, res) {
 exports.top = async (req, res) => {
     try {
         const products = await productService.top(10)
-        res.render('product/views/top', {products})
+        res.render('product/views/top', { products })
     } catch (err) {
         console.log(err);
     }
 }
 
-async function renderAddPage(res, product) {  
+async function renderAddPage(res, product) {
     res.render('./product/views/add', {
         product: product,
         everySize: Product.everySize
@@ -124,11 +119,23 @@ async function renderEditPage(res, page, product) {
     })
 }
 
-function saveImage(product, imageEncoded) {
-    if (imageEncoded == null || imageEncoded == '') return
-    const image = JSON.parse(imageEncoded)
-    if (image != null && imageMineTypes.includes(image.type)) {
-        product.image = new Buffer.from(image.data, 'base64')
-        product.imageType = image.type
+// function saveImage(product, imageEncoded) {
+//     if (imageEncoded == null || imageEncoded == '') return
+//     const image = JSON.parse(imageEncoded)
+//     if (image != null && imageMineTypes.includes(image.type)) {
+//         product.image = new Buffer.from(image.data, 'base64')
+//         product.imageType = image.type
+//     }
+// }
+
+async function uploadToCloudinary(pathOnCloudinary, filePath) {
+    try {
+        const result = await cloudinary.uploader.upload(filePath, { public_id: pathOnCloudinary })
+        fs.unlinkSync(filePath)
+        return result.url
+    } catch (error) {
+        console.log(error);
+        fs.unlinkSync(filePath)
+        return 'fail'
     }
 }

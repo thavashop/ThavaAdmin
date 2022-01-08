@@ -9,7 +9,7 @@ const schema = mongoose.Schema({
         type: Number,
         required: true
     },
-    image: String,
+    image: Array,
     image2: String,
     material: String,
     care: String,
