@@ -25,7 +25,7 @@ exports.list = async (req, res) => {
 }
 
 exports.renderAdd = async (req, res) => {
-    renderAddPage(res, adminService.new())
+    renderAddPage(res, adminService.create())
 }
 
 exports.add = async (req, res) => {
@@ -37,19 +37,17 @@ exports.add = async (req, res) => {
         return renderAddPage(res, body)
     }
 
-    const admin = new Admin({
-        username: body.username,
-        password: body.password,
-        firstName: body.firstName,
-        lastName: body.lastName,
-        email: body.email,
-        phone: body.phone
-    })
-
+    const admin = adminService.create(body)
     try {
-        await adminService.add(admin)
-        req.flash('success','Admin account added')
-        renderAddPage(res, adminService.new())
+        if (await adminService.existedUsername(admin.username)) {
+            req.flash('error','That username is already used')
+            renderAddPage(res, admin)
+        }
+        else {
+            await adminService.add(admin)
+            req.flash('success','Admin account added')
+            renderAddPage(res, adminService.create())
+        }
     } catch (err) {
         console.log(err);
         req.flash('error','Admin account add failed')
@@ -72,6 +70,33 @@ exports.edit = async function (req, res) {
 exports.view = async (req, res) => {
     const admin = await adminService.findById(req.user.id)
     res.render('admin/views/profile', {account: admin})
+}
+
+exports.ban = async (req, res) => {
+    const {target} = req.body
+    try {
+        if (target == req.user.id) {
+            res.status(403).send('You can not ban yourself, silly')
+        }
+        else {
+            await adminService.ban(req.body.target)
+            res.sendStatus(200)
+        }
+    } catch (error) {
+        console.log(error);
+        const name = await adminService.getAdminname(target)
+        res.status(403).send('Error banning admin ' + name)
+    }
+}
+
+exports.unban = async (req, res) => {
+    try {
+        await adminService.unban(req.body.target)
+        res.sendStatus(200)
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(403)
+    }
 }
 
 async function renderAddPage(res, admin) {

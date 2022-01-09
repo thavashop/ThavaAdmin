@@ -10,7 +10,12 @@ module.exports = async (passport) => {
 
         // Match password
         try {
-            if (await adminService.validatePassword(password, admin)) return done(null, admin)
+            if (await adminService.validatePassword(password, admin)) 
+            {
+                // Check ban
+                if (admin.status == 'banned') return done(null, false, {message: 'You have been banned'})
+                return done(null, admin)
+            }
             else return done(null, false, {message: 'Password incorrect'})
         } catch (err) {
             return done(err)

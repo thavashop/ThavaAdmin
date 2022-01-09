@@ -25,6 +25,10 @@ const schema = mongoose.Schema({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        default: 'normal',
+    },
 })
 
 module.exports = mongoose.model('Admin', schema, 'admin')

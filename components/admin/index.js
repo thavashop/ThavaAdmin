@@ -12,8 +12,11 @@ router.get('/', controller.list);
 router.get('/add', controller.renderAdd);
 router.post('/', controller.add)
 
+// ban/unban account
+router.post('/ban', controller.ban)
+router.post('/unban', controller.unban)
+
 // edit profile
-// router.get('/:id/edit', controller.renderEdit)
 router.put('/', controller.edit)
 
 // delete account

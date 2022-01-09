@@ -11,7 +11,7 @@ exports.findByPage = (page, itemPerPage) => Admin.find({}).skip(page * itemPerPa
 
 exports.findById = (id) => Admin.findById(id).lean()
 
-exports.new = () => new Admin()
+exports.create = (data) => new Admin(data)
 
 exports.add = async (admin) => {
     const originalPassword = admin.password
@@ -39,6 +39,20 @@ exports.edit = async (id, changes) => {
     } catch (err) {
         throw err
     }
+}
+
+exports.ban = (id) => Admin.updateOne({_id: id}, {$set: {status: 'banned'}})
+
+exports.unban = (id) => Admin.updateOne({_id: id}, {$set: {status: 'normal'}})
+
+exports.getAdminname = async (id) => {
+    const user = await Admin.findById(id).lean()
+    return user.username
+}
+
+exports.existedUsername = async (username) => {
+    const n = await Admin.count({username: username})
+    return (n != 0)
 }
 
 exports.model = Admin

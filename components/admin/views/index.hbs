@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/vendor/toastr/css/toastr.min.css">
+
 {{> welcome from='Admins' to='List'}}
 {{> notifications}}
 <div></div>
@@ -17,6 +19,8 @@
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody style="color: black;">
@@ -27,6 +31,20 @@
                                 <td>{{lastName}}</td>
                                 <td>{{email}}</td>
                                 <td>{{phone}}</td>
+                                <td><span id="{{_id}}"
+                                {{#if (equals status 'banned')}}class="badge badge-danger"
+                                {{else}}class="badge badge-success"{{/if}}>{{status}}</span></td>
+                                <td>
+                                    <button type="button"
+                                    data-admin-id="{{_id}}" data-admin-name="{{username}}"
+                                    {{#if (equals status 'banned')}}
+                                        class="toastr-info-top-right btn btn-outline-success">Unban
+                                    {{else}}
+                                        class="toastr-info-top-right btn btn-outline-danger">Ban
+                                    {{/if}}
+                                    </button>
+                                    {{!-- <button type="button" class="btn btn-outline-danger">Ban</button> --}}
+                                </td>
                             </tr>
                             {{/each}}
                         </tbody>
@@ -39,3 +57,5 @@
         </div>
     </div>
 </div>
+<script src="/vendor/toastr/js/toastr.min.js"></script>
+<script src="/js/ban-admin.js"></script>
