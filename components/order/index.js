@@ -17,7 +17,6 @@ router.get('/:id', controller.details)
 
 // edit order
 router.get('/:id/edit', controller.edit)
-// router.get('/:id/edit', controller.renderEdit)
 
 // delete order
 // router.delete('/:id', controller.delete)

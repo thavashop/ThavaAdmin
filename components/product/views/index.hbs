@@ -8,6 +8,46 @@
                 <h4 class="card-title">Products management</h4>
             </div>
             <div class="card-body">
+                <div class="basic-form">
+                    <form action="" method="get">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <label>Care</label>
+                                <select class="form-control" name="care">
+                                    <option>All</option>
+                                    <option>Hand Wash Only</option>
+                                    <option>Machine Wash</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2 mt-2 mt-sm-0">
+                                <label>Color</label>
+                                <select class="form-control" name="color">
+                                    <option>All</option>
+                                    {{#each colors}}<option>{{this}}</option>{{/each}}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 mt-2 mt-sm-0">
+                                <label>Brand</label>
+                                <select class="form-control" name="brand">
+                                    <option>All</option>
+                                    {{#each brands}}<option>{{this}}</option>{{/each}}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 mt-2 mt-sm-0">
+                                <label>Material</label>
+                                <select class="form-control" name="material">
+                                    <option>All</option>
+                                    {{#each materials}}<option>{{this}}</option>{{/each}}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 mt-2 mt-sm-0">
+                                <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table header-border table-hover verticle-middle" style="min-width: 845px">
                         <thead>

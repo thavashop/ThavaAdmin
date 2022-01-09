@@ -5,20 +5,32 @@ const fs = require('fs')
 
 exports.list = async function (req, res) {
     try {
-        // pagination        
-        const itemPerPage = 5
-        const nProduct = await productService.count()
-        const nPage = Math.ceil(nProduct / itemPerPage)
-        const pages = Array.from(Array(nPage), (_, i) => i + 1)
+        // get page req
         const q = req.query
         let page = q.page == null ? 0 : q.page - 1
-        const products = await productService.findByPage(page, itemPerPage)
+        delete req.query.page
+
+        // filter
+        const brands = await productService.getAllValueOf('brand')
+        const colors = await productService.getAllValueOf('color')
+        const materials = await productService.getAllValueOf('material')
+        // const {care, brand, color, material} = req.query
+        let filter = req.query
+        filter = Object.entries(filter).filter(([key, value]) => value != 'All')
+        filter = Object.fromEntries(filter)
+        const queryUrl = req.url.slice(req.url.indexOf('care'))
+
+        // pagination        
+        const itemPerPage = 5
+        const nProduct = await productService.count(filter)
+        const nPage = Math.ceil(nProduct / itemPerPage)
+        const pages = Array.from(Array(nPage), (_, i) => i + 1)
+        
+        const products = await productService.findByPage(page, itemPerPage, filter)
 
         res.render('product/views/index', {
-            page: page + 1,
-            pages: pages,
-            products: products,
-        });
+            page: page + 1, pages, products, 
+            brands, colors, materials, queryUrl});
     } catch (err) {
         console.log(err);
         res.render('product/views/index')

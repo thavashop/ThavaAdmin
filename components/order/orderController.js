@@ -121,16 +121,6 @@ exports.add = async (req, res) => {
     }
 }
 
-// exports.renderEdit = async (req, res) => {
-//     try {
-//         const product = await orderService.findById(req.params.id)
-//         renderEditPage(res, req.query.page, product)
-//     } catch (err) {
-//         console.log(err);
-//         res.redirect('products')
-//     }
-// }
-
 exports.edit = async (req, res) => {
     try {
         let status = req.query.status
