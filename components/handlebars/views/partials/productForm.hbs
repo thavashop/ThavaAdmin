@@ -1,3 +1,6 @@
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+
 {{#with product}}
 <div class="form-group row">
     <label class="col-sm-2 col-form-label">Name</label>
@@ -33,12 +36,8 @@
     <label class="col-sm-2 col-form-label">Care</label>
     <div class="col-sm-10">
         <select class="form-control" id="sel1" name="care">
-            <option {{#if (equals care "Machine Wash")}}
-                selected
-            {{/if}}>Machine Wash</option>
-            <option {{#if (equals care "Hand Wash Only")}}
-                selected
-            {{/if}}>Hand Wash Only</option>
+            <option {{#if (equals care "Machine Wash" )}} selected {{/if}}>Machine Wash</option>
+            <option {{#if (equals care "Hand Wash Only" )}} selected {{/if}}>Hand Wash Only</option>
         </select>
     </div>
 </div>
@@ -60,7 +59,7 @@
 <div class="form-group row">
     <label class="col-sm-2 col-form-label">Image</label>
     <div class="col-sm-10">
-        <input type="file" name="image" multiple class="filepond" data-max-total-files="5" data-max-file-size="3MB">
+        <input type="file" name="image" multiple data-max-total-files="5" data-max-file-size="3MB">
     </div>
 </div>
 <div class="form-group row">
@@ -69,4 +68,30 @@
         <textarea class="form-control" rows="4" id="comment" name="description">{{description}}</textarea>
     </div>
 </div>
+<script>
+    FilePond.registerPlugin(
+        FilePondPluginImagePreview,
+        FilePondPluginImageResize,
+        // FilePondPluginFileEncode,
+    )
+
+    FilePond.setOptions({
+        // stylePanelAspectRatio: 337/250,
+        imageResizeTargetWidth: 250,
+        imageResizeTargetHeight: 337,
+        server: {
+            url: '/products/upload',
+            fetch: null,
+            revert: null,
+        }
+    })
+
+    const inputElement = document.querySelector('input[type="file"]');
+    let images = []
+    {{#if image}}
+        const s = '{{ image }}'
+        images = s.split(',').map(image => ({ source: image }))
+    {{/if}}
+    const pond = FilePond.create(inputElement, { files: images, })
+</script>
 {{/with}}

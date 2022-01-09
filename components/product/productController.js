@@ -53,11 +53,7 @@ exports.upload = async (req, res) => {
 exports.add = async (req, res) => {
     const product = productService.create(req.body)
     if (product.image != '') product.image = await Promise.all(
-        product.image.map(async path => {
-            const imageId = path.slice(path.lastIndexOf('\\') + 2)
-            const pathOnCloudinary = `products/${product._id}/${imageId}`
-            return await uploadToCloudinary(pathOnCloudinary, path)
-        }))
+        product.image.map(async path => await uploadToCloudinary(product._id, path)))
     try {
         await product.save()
         req.flash('success', 'Product added')
@@ -82,6 +78,16 @@ exports.renderEdit = async (req, res) => {
 exports.edit = async function (req, res) {
     let product
     try {
+        // handle images
+        const productId = req.params.id
+        let images = req.body.image
+        if (!Array.isArray(images)) images = Array(images)
+        if (images != '') req.body.image = await Promise.all(
+            images.map(async path => {
+                await cloudinary.api.delete_resources_by_tag(productId)
+                return await uploadToCloudinary(productId, path)
+        }))
+
         product = await productService.edit(req.params.id, req.body)
         req.flash('success', 'Product editted')
         res.redirect('/products?&page=' + req.query.page)
@@ -138,14 +144,18 @@ async function renderEditPage(res, page, product) {
 //     }
 // }
 
-async function uploadToCloudinary(pathOnCloudinary, filePath) {
+async function uploadToCloudinary(productId, filePath) {
+    const imageId = filePath.slice(filePath.lastIndexOf('\\') + 2)
+    const pathOnCloudinary = `products/${productId}/${imageId}`
     try {
-        const result = await cloudinary.uploader.upload(filePath, { 
-            public_id: pathOnCloudinary, 
+        const result = await cloudinary.uploader.upload(filePath, {
+            public_id: pathOnCloudinary,
+            tags: productId,
             transformation: {
                 width: 250,
                 height: 337,
-            }})
+            },
+        })
         fs.unlinkSync(filePath)
         return result.url
     } catch (error) {

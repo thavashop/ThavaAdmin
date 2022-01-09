@@ -17,5 +17,3 @@ exports.edit = (id, changes) => Product.updateOne({_id: id}, changes)
 exports.create = (data) => new Product(data)
 
 exports.everySize = () => Product.everySize
-
-exports.model = Product
