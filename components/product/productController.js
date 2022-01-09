@@ -1,7 +1,6 @@
+const formidable = require('formidable')
 const productService = require('./productService')
 const cloudinary = require('../cloudinary')
-const Product = productService.model
-const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
 const fs = require('fs')
 
 exports.list = async function (req, res) {
@@ -27,19 +26,42 @@ exports.list = async function (req, res) {
 }
 
 exports.renderAdd = async (req, res) => {
-    renderAddPage(res, new Product())
+    renderAddPage(res, productService.create())
+}
+
+exports.upload = async (req, res) => {
+    const form = formidable({ multiples: false })
+    try {
+        const files = await new Promise((resolve, reject) => {
+            form.parse(req, (err, fields, files) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(files);
+            });
+        });
+        const { filepath, mimetype, newFilename: id, originalFilename: filename } = files.image
+        res.writeHead(200, { 'Content-Type': mimetype });
+        res.end(filepath);
+
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 exports.add = async (req, res) => {
-    const product = new Product(req.body)
-    product.image = await Promise.all(req.files.map(async file => {
-        const pathOnCloudinary = `products/${product._id}/${file.filename}`
-        return await uploadToCloudinary(pathOnCloudinary, file.path)
-    }))
+    const product = productService.create(req.body)
+    if (product.image != '') product.image = await Promise.all(
+        product.image.map(async path => {
+            const imageId = path.slice(path.lastIndexOf('\\') + 2)
+            const pathOnCloudinary = `products/${product._id}/${imageId}`
+            return await uploadToCloudinary(pathOnCloudinary, path)
+        }))
     try {
         await product.save()
         req.flash('success', 'Product added')
-        renderAddPage(res, new Product())
+        renderAddPage(res, productService.create())
     } catch (error) {
         console.log(error);
         req.flash('error', 'Product add failed')
@@ -60,20 +82,7 @@ exports.renderEdit = async (req, res) => {
 exports.edit = async function (req, res) {
     let product
     try {
-        const body = req.body
-        product = await productService.findById(req.params.id)
-        with (product) {
-            name = body.name
-            price = body.price
-            description = body.description
-            brand = body.brand
-            material = body.material
-            care = body.care
-            color = body.color
-            size = body.size
-        }
-        saveImage(product, body.image)
-        await product.save()
+        product = await productService.edit(req.params.id, req.body)
         req.flash('success', 'Product editted')
         res.redirect('/products?&page=' + req.query.page)
     } catch (err) {
@@ -107,7 +116,7 @@ exports.top = async (req, res) => {
 async function renderAddPage(res, product) {
     res.render('./product/views/add', {
         product: product,
-        everySize: Product.everySize
+        everySize: productService.everySize
     })
 }
 
@@ -115,11 +124,12 @@ async function renderEditPage(res, page, product) {
     res.render('product/views/edit', {
         product: product,
         page: page,
-        everySize: Product.everySize
+        everySize: productService.everySize
     })
 }
 
 // function saveImage(product, imageEncoded) {
+//     const imageMineTypes = ['image/jpg', 'image/png', 'image/gif', 'image/jpeg']
 //     if (imageEncoded == null || imageEncoded == '') return
 //     const image = JSON.parse(imageEncoded)
 //     if (image != null && imageMineTypes.includes(image.type)) {
@@ -130,7 +140,12 @@ async function renderEditPage(res, page, product) {
 
 async function uploadToCloudinary(pathOnCloudinary, filePath) {
     try {
-        const result = await cloudinary.uploader.upload(filePath, { public_id: pathOnCloudinary })
+        const result = await cloudinary.uploader.upload(filePath, { 
+            public_id: pathOnCloudinary, 
+            transformation: {
+                width: 250,
+                height: 337,
+            }})
         fs.unlinkSync(filePath)
         return result.url
     } catch (error) {

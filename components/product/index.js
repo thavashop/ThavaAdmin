@@ -1,16 +1,7 @@
 var express = require('express');
-const multer = require('multer')
 
 var router = express.Router();
 const controller = require('./productController')
-
-// setup multer
-const upload = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => cb(null, './uploads'),
-        filename: (req, file, cb) => cb(null, file.originalname),
-    })
-})
 
 // product list
 router.get('/', controller.list);
@@ -20,7 +11,8 @@ router.get('/top', controller.top);
 
 // add product
 router.get('/add', controller.renderAdd);
-router.post('/add', upload.array('image', 5), controller.add)
+router.post('/upload', controller.upload)
+router.post('/add', controller.add)
 
 // edit product
 router.get('/:id/edit', controller.renderEdit)
