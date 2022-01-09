@@ -10,9 +10,14 @@ router.get('/', controller.list);
 router.get('/top', controller.top);
 
 // add product
-router.get('/add', controller.renderAdd);
-router.post('/upload', controller.upload)
-router.post('/add', controller.add)
+router.route('/add')
+    .get(controller.renderAdd)
+    .post(controller.add)
+
+// image file handle
+router.route('/image')
+    .post(controller.saveImage)
+    .delete(controller.deleteImage)
 
 // edit product
 router.get('/:id/edit', controller.renderEdit)

@@ -28,8 +28,8 @@ app.set('view engine', 'hbs');
 
 // Middlewares
 // app.use(logger('dev'));
-// app.use(express.json());
-app.use(express.urlencoded({ limit: '50mb', extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'))

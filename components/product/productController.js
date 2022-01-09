@@ -29,7 +29,7 @@ exports.renderAdd = async (req, res) => {
     renderAddPage(res, productService.create())
 }
 
-exports.upload = async (req, res) => {
+exports.saveImage = async (req, res) => {
     const form = formidable({ multiples: false })
     try {
         const files = await new Promise((resolve, reject) => {
@@ -47,6 +47,16 @@ exports.upload = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+    }
+}
+
+exports.deleteImage = async (req, res) => {
+    const {path} = req.body
+    try {
+        fs.unlinkSync(path)        
+        return res.status(200).send()
+    } catch (error) {
+        return res.status(403).send()
     }
 }
 
@@ -87,6 +97,7 @@ exports.edit = async function (req, res) {
                 await cloudinary.api.delete_resources_by_tag(productId)
                 return await uploadToCloudinary(productId, path)
         }))
+        else req.body.image = null
 
         product = await productService.edit(req.params.id, req.body)
         req.flash('success', 'Product editted')
@@ -154,6 +165,7 @@ async function uploadToCloudinary(productId, filePath) {
             transformation: {
                 width: 250,
                 height: 337,
+                crop: 'fit',
             },
         })
         fs.unlinkSync(filePath)

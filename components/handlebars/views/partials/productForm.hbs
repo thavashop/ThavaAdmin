@@ -68,6 +68,11 @@
         <textarea class="form-control" rows="4" id="comment" name="description">{{description}}</textarea>
     </div>
 </div>
+<style>
+    .filepond--item {
+        width: calc(50% - 0.5em);
+    }
+</style>
 <script>
     FilePond.registerPlugin(
         FilePondPluginImagePreview,
@@ -80,9 +85,23 @@
         imageResizeTargetWidth: 250,
         imageResizeTargetHeight: 337,
         server: {
-            url: '/products/upload',
+            url: '/products/image',
             fetch: null,
-            revert: null,
+            revert: (uniqueFileId, load, error) => {
+                $.ajax({
+                    url: '/products/image',
+                    method: 'DELETE',
+                    data: {path: uniqueFileId},
+                    success: (result) => {
+                        console.log(result)
+                        load();
+                    },
+                    error: (error) => {
+                        console.log(error)
+                        error('There is a problem');
+                    }
+                })                
+            },
         }
     })
 
@@ -94,4 +113,5 @@
     {{/if}}
     const pond = FilePond.create(inputElement, { files: images, })
 </script>
+<script src="/js/image-file-delete.js"></script>
 {{/with}}
