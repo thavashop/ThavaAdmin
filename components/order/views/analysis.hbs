@@ -24,6 +24,22 @@
     </div>
 </div>
 
+<style>
+    .ct-chart-bar {
+        overflow: visible;
+        margin: 0 0 30px 0;
+    }
+
+    .ct-chart .ct-label.ct-horizontal.ct-end {
+        position: relative;
+        justify-content: flex-end;
+        text-align: right;
+        transform-origin: 100% 0;
+        transform: translate(-100%) rotate(-0deg);
+        white-space: nowrap;
+    }
+</style>
+
 <script>
     (function ($) {
         "use strict"
@@ -47,6 +63,5 @@
             Chartist.plugins.tooltip()
         ]
     });
-
     }) (jQuery);
 </script>

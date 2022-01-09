@@ -26,7 +26,12 @@
                                 <td>{{_id}}</td>
                                 <td>{{customer.username}}</td>
                                 <td>{{date}}</td>
-                                <td>{{status}}</td>
+                                <td><span 
+                                {{#if (equals status 'Not delivered')}}class="badge badge-warning"
+                                {{else}}
+                                    {{#if (equals status 'Delivered')}}class="badge badge-success"
+                                    {{else}}class="badge badge-primary"{{/if}}
+                                {{/if}}>{{status}}</span></td>
                                 <td>{{paymentType}}</td>
                                 <td style="white-space: nowrap;">
                                     <div class="dropdown show">

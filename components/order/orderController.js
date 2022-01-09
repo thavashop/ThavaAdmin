@@ -38,7 +38,7 @@ exports.analysis = async (req, res) => {
         orders.forEach(order => {
             const date = order.date
             const year = date.getYear() + 1900
-            const month = date.getMonth()
+            const month = date.getMonth() + 1
             const day = date.getDate()
             let key, page
             switch (period) {
@@ -65,7 +65,7 @@ exports.analysis = async (req, res) => {
                     break
             }            
             if (page != '') key += '.' + page
-            const num = order.details.reduce((sum, entry) => sum + Number(entry.amount), 0)
+            const num = order.details.reduce((sum, entry) => sum + Number(entry.quantity), 0)
             if (data[`${key}`] == undefined) {
                 data[`${key}`] = num
             }
@@ -131,20 +131,20 @@ exports.add = async (req, res) => {
 //     }
 // }
 
-// exports.edit = async (req, res) => {
-//     try {
-//         let status = req.query.status
-//         if (status == 'notDelivered') status = 'Not delivered'
-//         else if (status == 'delivering') status = 'Delivering'
-//         else if (status == 'delivered') status = 'Delivered'
-//         await orderService.updateStatus(req.params.id, status)
+exports.edit = async (req, res) => {
+    try {
+        let status = req.query.status
+        if (status == 'notDelivered') status = 'Not delivered'
+        else if (status == 'delivering') status = 'Delivering'
+        else if (status == 'delivered') status = 'Delivered'
+        await orderService.updateStatus(req.params.id, status)
 
-//         req.flash('success', 'Order status updated')
-//         res.redirect('/orders')
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
+        req.flash('success', 'Order status updated')
+        res.redirect('/orders')
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 // exports.delete = async function (req, res) {
 //     try {

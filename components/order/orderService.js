@@ -33,7 +33,7 @@ exports.getProductEntries = async (details) => {
 
 exports.updateStatus = async (id, status) => {
     try {
-        await Order.updateOne({id: id},{$set: {status: status}})        
+        await Order.updateOne({_id: id},{$set: {status: status}})        
     } catch (error) {
         console.log(error);
     }

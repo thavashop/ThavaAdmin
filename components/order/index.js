@@ -16,8 +16,8 @@ router.post('/', controller.add)
 router.get('/:id', controller.details)
 
 // edit order
+router.get('/:id/edit', controller.edit)
 // router.get('/:id/edit', controller.renderEdit)
-// router.get('/:id/edit', controller.edit)
 
 // delete order
 // router.delete('/:id', controller.delete)
