@@ -37,8 +37,8 @@
                         <tbody style="color: black;">
                             {{#each products}}
                             <tr>
-                                <td>{{@index}}</td>
-                                <td><img width="50" height="50" src={{imageObj}}></td>
+                                <td>{{inc @index}}</td>
+                                <td><img width="50" height="50" src={{image.[0]}}></td>
                                 <td style="max-width: 150px;">{{name}}</td>
                                 <td>{{sales}}</td>
                                 <td>{{price}}</td>
