@@ -41,7 +41,25 @@
                                 </select>
                             </div>
                             <div class="col-sm-2 mt-2 mt-sm-0">
-                                <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                                <label>Gender</label>
+                                <select class="form-control" name="gender">
+                                    <option>All</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1 mt-2 mt-sm-0">
+                                <label>Type</label>
+                                <select class="form-control" name="type">
+                                    <option>All</option>
+                                    <option>Shirt</option>
+                                    <option>Pant</option>
+                                    <option>Accessory</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1 mt-2 mt-sm-0">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="form-control btn btn-primary">Filter</button>
                             </div>
                         </div>
                     </form>
@@ -55,6 +73,8 @@
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th>Price</th>
+                                <th>Gender</th>
+                                <th>Type</th>
                                 <th>Brand</th>
                                 <th>Color</th>
                                 <th>Material</th>
@@ -69,6 +89,8 @@
                                 <td><img width="50" height="50" src={{image}}></td>
                                 <td style="max-width: 150px;">{{name}}</td>
                                 <td>{{price}}</td>
+                                <td>{{gender}}</td>
+                                <td>{{type}}</td>
                                 <td>{{brand}}</td>
                                 <td>{{color}}</td>
                                 <td

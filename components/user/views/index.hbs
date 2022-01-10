@@ -45,7 +45,10 @@
                                 <td>{{phone}}</td>
                                 <td><span id="{{_id}}"
                                 {{#if (equals status 'banned')}}class="badge badge-danger"
-                                {{else}}class="badge badge-success"{{/if}}>{{status}}</span></td>
+                                {{else}}
+                                    {{#if (equals status 'activated')}}class="badge badge-success"
+                                    {{else}}class="badge badge-info"{{/if}}
+                                {{/if}}>{{status}}</span></td>
                                 <td>
                                     <button type="button"
                                     data-user-id="{{_id}}" data-user-name="{{username}}"
