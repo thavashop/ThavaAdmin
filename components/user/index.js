@@ -12,16 +12,8 @@ router.get('/', controller.list);
 router.get('/:id', controller.details)
 
 // ban/unban account
-router.get('/:id/ban', controller.ban)
-router.get('/:id/unban', controller.unban)
-
-// add account
-// router.get('/add', controller.renderAdd);
-// router.post('/', controller.add)
-
-// edit profile
-// router.get('/:id/edit', controller.renderEdit)
-// router.put('/', controller.edit)
+router.post('/ban', controller.ban)
+router.post('/unban', controller.unban)
 
 // delete account
 // router.delete('/:id', controller.delete)

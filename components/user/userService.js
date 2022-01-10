@@ -43,21 +43,9 @@ exports.edit = async (id, changes) => {
     }
 }
 
-exports.ban = async (id) => {
-    try {
-        await User.updateOne({_id: id}, {$set: {status: 'banned'}})
-    } catch (err) {
-        console.log(err);
-    }
-}
+exports.ban = async (id) => await User.updateOne({_id: id}, {$set: {status: 'banned'}})
 
-exports.unban = async (id) => {
-    try {
-        await User.updateOne({_id: id}, {$set: {status: 'activated'}})
-    } catch (err) {
-        console.log(err);
-    }
-}
+exports.unban = async (id) => await User.updateOne({_id: id}, {$set: {status: 'activated'}})
 
 exports.getUsername = async (id) => {
     const user = await User.findById(id).lean()

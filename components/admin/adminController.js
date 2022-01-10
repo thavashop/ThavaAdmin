@@ -79,7 +79,7 @@ exports.ban = async (req, res) => {
             res.status(403).send('You can not ban yourself, silly')
         }
         else {
-            await adminService.ban(req.body.target)
+            await adminService.ban(target)
             res.sendStatus(200)
         }
     } catch (error) {
