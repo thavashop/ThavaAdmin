@@ -20,9 +20,9 @@ exports.getProductEntries = async (details) => {
         try {
             const product = await productService.findById(entry.id)
             entries.push({
-                imageObj: product.imageObj,
+                image: product.image,
                 name: product.name,
-                amount: entry.amount
+                quantity: entry.quantity
             })
         } catch (err) {
             console.log(err);
